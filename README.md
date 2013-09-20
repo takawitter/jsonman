@@ -38,6 +38,8 @@ public class NodeTest {
 		Assert.assertFalse(n.isMap());
 		Assert.assertFalse(n.isString());
 		Assert.assertFalse(n.isNumber());
+		Assert.assertFalse(n.isBoolean());
+		Assert.assertFalse(n.isNull());
 
 		Iterator<Node> it = n.getAllChildren().iterator();
 		Node node1 = it.next();
