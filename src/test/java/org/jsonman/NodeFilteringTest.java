@@ -25,6 +25,7 @@ import net.arnx.jsonic.JSON;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jsonman.node.MapNode;
 import org.jsonman.node.StringNode;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class NodeFilteringTest {
@@ -65,6 +66,7 @@ public class NodeFilteringTest {
 					parent = parent.getParent();
 				}
 				Iterator<Pair<Node, Object>> it = paths.descendingIterator();
+				it.next();
 				while(true){
 					Pair<Node, Object> ref = it.next();
 					Node n = null;
@@ -88,6 +90,8 @@ public class NodeFilteringTest {
 				}
 			}
 		});
-		System.out.println(JSON.encode(target.getValue()));
+		Assert.assertEquals(
+				"[{\"attributes\":[{\"name\":\"class\",\"value\":\"bodyclass\"}]},{\"attributes\":[{\"name\":\"class\",\"value\":\"h1class\"}]},{\"attributes\":[{\"name\":\"class\",\"value\":\"h2class\"}]}]",
+				JSON.encode(target.getValue()));
 	}
 }
