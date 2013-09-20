@@ -30,7 +30,7 @@ public class NumberNode extends AbstractNode{
 	}
 
 	@Override
-	public boolean isValue(){
+	public boolean isNumber(){
 		return true;
 	}
 

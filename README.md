@@ -34,13 +34,13 @@ public class NodeTest {
 		Assert.assertTrue(n.isRoot());
 		Assert.assertTrue(n.isArray());
 		Assert.assertFalse(n.isMap());
-		Assert.assertFalse(n.isValue());
+		Assert.assertFalse(n.isString());
+		Assert.assertFalse(n.isNumber());
+
 		Iterator<Node> it = n.getAllChildren().iterator();
-		it.next().visit(new TestVisitor() {
-			public void accept(NumberNode node){
-				Assert.assertEquals(2, node.getValue().intValue());
-			}
-		});
+		Node node1 = it.next();
+		Assert.assertTrue(node1.isNumber());
+		Assert.assertEquals(2, ((NumberNode)node1).getValue().intValue());
 		it.next().visit(new TestVisitor(){
 			public void accept(ArrayNode node) {
 				Assert.assertEquals(3, node.getValue().size());

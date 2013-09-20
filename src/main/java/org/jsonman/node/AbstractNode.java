@@ -33,7 +33,12 @@ public abstract class AbstractNode implements Node{
 	}
 
 	@Override
-	public boolean isValue(){
+	public boolean isString(){
+		return false;
+	}
+
+	@Override
+	public boolean isNumber(){
 		return false;
 	}
 

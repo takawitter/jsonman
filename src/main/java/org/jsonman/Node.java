@@ -17,7 +17,8 @@ package org.jsonman;
 
 public interface Node {
 	boolean isRoot();
-	boolean isValue();
+	boolean isString();
+	boolean isNumber();
 	boolean isArray();
 	boolean isMap();
 	Object getValue();

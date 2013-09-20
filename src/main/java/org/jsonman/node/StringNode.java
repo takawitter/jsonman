@@ -30,7 +30,7 @@ public class StringNode extends AbstractNode{
 	}
 
 	@Override
-	public boolean isValue(){
+	public boolean isString(){
 		return true;
 	}
 
