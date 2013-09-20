@@ -18,34 +18,31 @@ package org.jsonman.node;
 import org.jsonman.Node;
 import org.jsonman.NodeVisitor;
 
-
-public class StringNode extends AbstractNode{
-	public StringNode(String value){
-		this.value = value;
+public class NullNode extends AbstractNode{
+	public NullNode(){
 	}
 
-	public StringNode(Node parent, Object childId, String value){
+	public NullNode(Node parent, Object childId){
 		super(parent, childId);
-		this.value = value;
 	}
 
 	@Override
-	public boolean isString(){
+	public boolean isNull(){
 		return true;
 	}
 
 	@Override
-	public String getValue(){
-		return value;
+	public Object getValue(){
+		return null;
 	}
 
 	@Override
 	public void setValue(Object value) {
-		setValue((String)value);
+		setValue((Boolean)value);
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setValue(Boolean value) {
+		throw new UnsupportedOperationException("You can't set value to null node.");
 	}
 
 	@Override
@@ -55,8 +52,6 @@ public class StringNode extends AbstractNode{
 
 	@Override
 	public Node createEmpty() {
-		return new StringNode(getParent(), getChildId(), null);
+		return new NullNode(getParent(), getChildId());
 	}
-
-	private String value;
 }

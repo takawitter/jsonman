@@ -20,7 +20,9 @@ import java.util.Iterator;
 import net.arnx.jsonic.JSON;
 
 import org.jsonman.node.ArrayNode;
+import org.jsonman.node.BooleanNode;
 import org.jsonman.node.MapNode;
+import org.jsonman.node.NullNode;
 import org.jsonman.node.NumberNode;
 import org.jsonman.node.StringNode;
 import org.junit.Assert;
@@ -28,15 +30,17 @@ import org.junit.Test;
 
 public class NodeTest {
 	static class TestVisitor implements NodeVisitor{
-		public void accept(ArrayNode node) { Assert.fail();}
 		public void accept(MapNode node) { Assert.fail();}
-		public void accept(NumberNode node) { Assert.fail();}
+		public void accept(ArrayNode node) { Assert.fail();}
 		public void accept(StringNode node) { Assert.fail();}
+		public void accept(NumberNode node) { Assert.fail();}
+		public void accept(BooleanNode node) { Assert.fail();}
+		public void accept(NullNode node) { Assert.fail();}
 	}
 	@Test
 	public void test() throws Exception{
 		Node n = NodeFactory.create(JSON.decode(
-				"[2,[1,2,3],{\"name1\":4,\"name2\":[{\"name2name1\":5}],\"name3\":{}}]"
+				"[true,2,[1,2,3],{\"name1\":4,\"name2\":[{\"name2name1\":5}],\"name3\":{}}]"
 				));
 		Assert.assertTrue(n.isRoot());
 		Assert.assertTrue(n.isArray());
@@ -46,13 +50,16 @@ public class NodeTest {
 
 		Iterator<Node> it = n.getAllChildren().iterator();
 		Node node1 = it.next();
-		Assert.assertTrue(node1.isNumber());
-		Assert.assertEquals(2, ((NumberNode)node1).getValue().intValue());
+		Assert.assertTrue(node1.isBoolean());
+		Assert.assertTrue(((BooleanNode)node1).getValue());
+		Node node2 = it.next();
+		Assert.assertTrue(node2.isNumber());
+		Assert.assertEquals(2, ((NumberNode)node2).getValue().intValue());
 		it.next().visit(new TestVisitor(){
 			public void accept(ArrayNode node) {
 				Assert.assertEquals(3, node.getValue().size());
 			}
-		});;
+		});
 		it.next().visit(new TestVisitor(){
 			public void accept(MapNode node) {
 				Assert.assertEquals(3, node.getValue().size());

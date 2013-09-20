@@ -16,15 +16,18 @@
 package org.jsonman;
 
 public interface Node {
-	boolean isRoot();
+	boolean isMap();
+	boolean isArray();
 	boolean isString();
 	boolean isNumber();
-	boolean isArray();
-	boolean isMap();
+	boolean isBoolean();
+	boolean isNull();
+
 	Object getValue();
 	void setValue(Object value);
 	void visit(NodeVisitor visitor);
 
+	boolean isRoot();
 	Node getParent();
 	Object getChildId();
 

@@ -18,33 +18,32 @@ package org.jsonman.node;
 import org.jsonman.Node;
 import org.jsonman.NodeVisitor;
 
-
-public class StringNode extends AbstractNode{
-	public StringNode(String value){
+public class BooleanNode extends AbstractNode{
+	public BooleanNode(Boolean value){
 		this.value = value;
 	}
 
-	public StringNode(Node parent, Object childId, String value){
+	public BooleanNode(Node parent, Object childId, Boolean value){
 		super(parent, childId);
 		this.value = value;
 	}
 
 	@Override
-	public boolean isString(){
+	public boolean isBoolean(){
 		return true;
 	}
 
 	@Override
-	public String getValue(){
+	public Boolean getValue(){
 		return value;
 	}
 
 	@Override
 	public void setValue(Object value) {
-		setValue((String)value);
+		setValue((Boolean)value);
 	}
 
-	public void setValue(String value) {
+	public void setValue(Boolean value) {
 		this.value = value;
 	}
 
@@ -55,8 +54,8 @@ public class StringNode extends AbstractNode{
 
 	@Override
 	public Node createEmpty() {
-		return new StringNode(getParent(), getChildId(), null);
+		return new BooleanNode(getParent(), getChildId(), null);
 	}
 
-	private String value;
+	private Boolean value;
 }

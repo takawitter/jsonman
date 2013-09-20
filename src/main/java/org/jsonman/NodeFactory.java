@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jsonman.node.ArrayNode;
+import org.jsonman.node.BooleanNode;
 import org.jsonman.node.MapNode;
 import org.jsonman.node.NumberNode;
 import org.jsonman.node.StringNode;
@@ -26,14 +27,18 @@ import org.jsonman.node.StringNode;
 public class NodeFactory {
 	@SuppressWarnings("unchecked")
 	public static Node create(Node parent, Object id, Object value){
-		if(value instanceof List){
-			return new ArrayNode(parent, id, (List<Object>)value);
+		if(value == null){
+			return new StringNode(parent, id, null);
 		} else if(value instanceof Map){
 			return new MapNode(parent, id, (Map<String, Object>)value);
-		} else if(value instanceof Number){
-			return new NumberNode(parent, id, (Number)value);
+		} else if(value instanceof List){
+			return new ArrayNode(parent, id, (List<Object>)value);
 		} else if(value instanceof String){
 			return new StringNode(parent, id, (String)value);
+		} else if(value instanceof Number){
+			return new NumberNode(parent, id, (Number)value);
+		} else if(value instanceof Boolean){
+			return new BooleanNode(parent, id, (Boolean)value);
 		} else{
 			throw new IllegalArgumentException("No suitable node class for " + value.getClass());
 		}
@@ -41,7 +46,9 @@ public class NodeFactory {
 
 	@SuppressWarnings("unchecked")
 	public static Node create(Object value){
-		if(value instanceof List){
+		if(value == null){
+			return new StringNode(null);
+		} else if(value instanceof List){
 			return new ArrayNode((List<Object>)value);
 		} else if(value instanceof Map){
 			return new MapNode((Map<String, Object>)value);
@@ -49,6 +56,8 @@ public class NodeFactory {
 			return new NumberNode((Number)value);
 		} else if(value instanceof String){
 			return new StringNode((String)value);
+		} else if(value instanceof Boolean){
+			return new BooleanNode((Boolean)value);
 		} else{
 			throw new IllegalArgumentException("No suitable node class for " + value.getClass());
 		}

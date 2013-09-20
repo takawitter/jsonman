@@ -53,6 +53,16 @@ public abstract class AbstractNode implements Node{
 	}
 
 	@Override
+	public boolean isBoolean() {
+		return false;
+	}
+
+	@Override
+	public boolean isNull() {
+		return false;
+	}
+
+	@Override
 	public Node getParent(){
 		return parent;
 	}

@@ -16,13 +16,17 @@
 package org.jsonman;
 
 import org.jsonman.node.ArrayNode;
+import org.jsonman.node.BooleanNode;
 import org.jsonman.node.MapNode;
+import org.jsonman.node.NullNode;
 import org.jsonman.node.NumberNode;
 import org.jsonman.node.StringNode;
 
 public interface NodeVisitor {
-	void accept(StringNode node);
-	void accept(NumberNode node);
 	void accept(ArrayNode node);
 	void accept(MapNode node);
+	void accept(StringNode node);
+	void accept(NumberNode node);
+	void accept(BooleanNode node);
+	void accept(NullNode node);
 }
