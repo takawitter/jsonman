@@ -24,11 +24,6 @@ public class NumberNode extends AbstractNode{
 		this.value = value;
 	}
 
-	public NumberNode(Node parent, Object childId, Number value){
-		super(parent, childId);
-		this.value = value;
-	}
-
 	@Override
 	public boolean isNumber(){
 		return true;
@@ -55,7 +50,7 @@ public class NumberNode extends AbstractNode{
 
 	@Override
 	public Node createEmpty() {
-		return new NumberNode(getParent(), getChildId(), null);
+		return new NumberNode(null);
 	}
 
 	private Number value;

@@ -23,11 +23,6 @@ public class BooleanNode extends AbstractNode{
 		this.value = value;
 	}
 
-	public BooleanNode(Node parent, Object childId, Boolean value){
-		super(parent, childId);
-		this.value = value;
-	}
-
 	@Override
 	public boolean isBoolean(){
 		return true;
@@ -54,7 +49,7 @@ public class BooleanNode extends AbstractNode{
 
 	@Override
 	public Node createEmpty() {
-		return new BooleanNode(getParent(), getChildId(), null);
+		return new BooleanNode(null);
 	}
 
 	private Boolean value;

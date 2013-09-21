@@ -22,10 +22,6 @@ public class NullNode extends AbstractNode{
 	public NullNode(){
 	}
 
-	public NullNode(Node parent, Object childId){
-		super(parent, childId);
-	}
-
 	@Override
 	public boolean isNull(){
 		return true;
@@ -38,10 +34,6 @@ public class NullNode extends AbstractNode{
 
 	@Override
 	public void setValue(Object value) {
-		setValue((Boolean)value);
-	}
-
-	public void setValue(Boolean value) {
 		throw new UnsupportedOperationException("You can't set value to null node.");
 	}
 
@@ -52,6 +44,6 @@ public class NullNode extends AbstractNode{
 
 	@Override
 	public Node createEmpty() {
-		return new NullNode(getParent(), getChildId());
+		return new NullNode();
 	}
 }

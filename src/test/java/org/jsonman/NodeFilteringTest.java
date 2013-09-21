@@ -22,7 +22,6 @@ import java.util.LinkedList;
 
 import net.arnx.jsonic.JSON;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.jsonman.node.MapNode;
 import org.jsonman.node.StringNode;
 import org.junit.Assert;
@@ -38,58 +37,65 @@ public class NodeFilteringTest {
 
 		// /attributes[name=class]
 		final Node target = src.createEmpty();
-		src.visit(new ArrayExpandingVisitor() {
+		src.visit(new NodeRecursiveVisitor(new LinkedList<Reference>()){
 			@Override
 			public void accept(MapNode node) {
 				Node an = node.getChild("attributes");
 				if(an == null) return;
-				an.visit(new ArrayExpandingVisitor(){
+				getPaths().addLast(new MapReference(node, "attributes"));
+				an.visit(new NodeRecursiveVisitor(getPaths()){
 					@Override
 					public void accept(final MapNode node) {
 						Node nn = node.getChild("name");
 						if(nn == null) return;
-						nn.visit(new ArrayExpandingVisitor(){
+						getPaths().addLast(new MapReference(node, "name"));
+						nn.visit(new NodeRecursiveVisitor(getPaths()){
 							@Override
 							public void accept(StringNode vnode) {
 								if(!"class".equals(vnode.getValue())) return;
-								copyTo(target, node);
+								copyTo(target, getPaths(), node);
 							}
 						});
+						getPaths().removeLast();
 					}
 				});
+				getPaths().removeLast();
 			}
-			void copyTo(Node target, Node node){
-				Deque<Pair<Node, Object>> paths = new LinkedList<Pair<Node, Object>>();
-				Node parent = node;
-				while(parent != null){
-					paths.add(Pair.of(parent, parent.getChildId()));
-					parent = parent.getParent();
+			void copyTo(Node target, Deque<Reference> paths, Node node){
+				System.out.println();
+				for(Reference r : paths){
+					System.out.println(r);
 				}
-				Iterator<Pair<Node, Object>> it = paths.descendingIterator();
-				it.next();
-				while(true){
-					Pair<Node, Object> ref = it.next();
-					Node n = null;
-					if(it.hasNext()){
-						n = ref.getLeft().createEmpty();
-					} else{
-						n = ref.getLeft();
-					}
-					if(target.isArray()){
-						target.appendChild(n);
-					} else if(target.isMap()){
-						target.appendChild(ref.getRight().toString(), n);
-					} else{
-						break;
-					}
-					if(it.hasNext()){
-						target = n;
-					} else{
-						break;
-					}
+				Iterator<Reference> it = paths.iterator();
+				Reference r = it.next();
+				if(target.isArray()){
+					target.appendChild(createNode(it, node));
+				} else if(target.isMap()){
+					target.appendChild(r.getId().toString(), createNode(it, node));
+				} else{
+					return;
 				}
+			}
+			Node createNode(Iterator<Reference> it, Node leaf){
+				Reference ref = it.next();
+				Node child = null;
+				if(it.hasNext()){
+					child = createNode(it, leaf);
+				} else{
+					return leaf;
+				}
+				Node n = ref.getParent().createEmpty();
+				if(n.isArray()){
+					n.appendChild(child);
+				} else if(n.isMap()){
+					n.appendChild(ref.getId().toString(), child);
+				} else{
+					return null;
+				}
+				return n;
 			}
 		});
+		System.out.println(JSON.encode(target.getValue()));
 		Assert.assertEquals(
 				"[{\"attributes\":[{\"name\":\"class\",\"value\":\"bodyclass\"}]},{\"attributes\":[{\"name\":\"class\",\"value\":\"h1class\"}]},{\"attributes\":[{\"name\":\"class\",\"value\":\"h2class\"}]}]",
 				JSON.encode(target.getValue()));

@@ -20,17 +20,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.jsonman.ArrayReference;
 import org.jsonman.Node;
 import org.jsonman.NodeFactory;
 import org.jsonman.NodeVisitor;
+import org.jsonman.Reference;
 
 public class ArrayNode extends AbstractNode{
 	public ArrayNode(List<Object> array){
-		this.array = array;
-	}
-
-	public ArrayNode(Node parent, Object childId, List<Object> array){
-		super(parent, childId);
 		this.array = array;
 	}
 
@@ -66,9 +64,33 @@ public class ArrayNode extends AbstractNode{
 					}
 					@Override
 					public Node next() {
-						Object index = entries.nextIndex();
+						return NodeFactory.create(entries.next());
+					}
+					@Override
+					public void remove() {
+						entries.remove();
+					}
+					private ListIterator<Object> entries = array.listIterator();
+				};
+			}
+		};
+	}
+
+	@Override
+	public Iterable<Pair<Reference, Node>> getChildren() {
+		return new Iterable<Pair<Reference, Node>>() {
+			@Override
+			public Iterator<Pair<Reference, Node>> iterator() {
+				return new Iterator<Pair<Reference, Node>>() {
+					@Override
+					public boolean hasNext() {
+						return entries.hasNext();
+					}
+					@Override
+					public Pair<Reference, Node> next() {
+						Integer id = entries.nextIndex();
 						Object v = entries.next();
-						return NodeFactory.create(ArrayNode.this, index, v);
+						return Pair.of((Reference)new ArrayReference(ArrayNode.this, id), NodeFactory.create(v));
 					}
 					@Override
 					public void remove() {
@@ -84,9 +106,7 @@ public class ArrayNode extends AbstractNode{
 	public void visitAllChildren(NodeVisitor visitor) {
 		ListIterator<Object> entries = array.listIterator();
 		while(entries.hasNext()){
-			Object index = entries.nextIndex();
-			Object v = entries.next();
-			NodeFactory.create(this, index, v).visit(visitor);
+			NodeFactory.create(entries.next()).visit(visitor);
 		}
 	}
 
@@ -96,14 +116,13 @@ public class ArrayNode extends AbstractNode{
 	}
 
 	public Node addChild(Object value){
-		int index = array.size();
 		array.add(value);
-		return NodeFactory.create(this, index, value);
+		return NodeFactory.create(value);
 	}
 
 	@Override
 	public Node createEmpty() {
-		return new ArrayNode(getParent(), getChildId(), new ArrayList<>());
+		return new ArrayNode(new ArrayList<>());
 	}
 
 	@Override

@@ -19,17 +19,15 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.jsonman.MapReference;
 import org.jsonman.Node;
 import org.jsonman.NodeFactory;
 import org.jsonman.NodeVisitor;
+import org.jsonman.Reference;
 
 public class MapNode extends AbstractNode{
 	public MapNode(Map<String, Object> map){
-		this.map = map;
-	}
-
-	public MapNode(Node parent, Object childId, Map<String, Object> map){
-		super(parent, childId);
 		this.map = map;
 	}
 
@@ -57,7 +55,7 @@ public class MapNode extends AbstractNode{
 	public Node getChild(Object childId) {
 		Object value = map.get(childId);
 		if(value == null) return null;
-		return NodeFactory.create(this, childId, value);
+		return NodeFactory.create(value);
 	}
 
 	@Override
@@ -73,7 +71,7 @@ public class MapNode extends AbstractNode{
 					@Override
 					public Node next() {
 						Map.Entry<String, Object> n = entries.next();
-						return NodeFactory.create(MapNode.this, n.getKey(), n.getValue());
+						return NodeFactory.create(n.getValue());
 					}
 					@Override
 					public void remove() {
@@ -86,9 +84,36 @@ public class MapNode extends AbstractNode{
 	}
 
 	@Override
+	public Iterable<Pair<Reference, Node>> getChildren() {
+		return new Iterable<Pair<Reference, Node>>() {
+			@Override
+			public Iterator<Pair<Reference, Node>> iterator() {
+				return new Iterator<Pair<Reference, Node>>() {
+					@Override
+					public boolean hasNext() {
+						return entries.hasNext();
+					}
+					@Override
+					public Pair<Reference, Node> next() {
+						Map.Entry<String, Object> e = entries.next();
+						String id = e.getKey();
+						Object value = e.getValue();
+						return Pair.of((Reference)new MapReference(MapNode.this, id), NodeFactory.create(value));
+					}
+					@Override
+					public void remove() {
+						entries.remove();
+					}
+					private Iterator<Map.Entry<String, Object>> entries = map.entrySet().iterator();
+				};
+			}
+		};
+	}
+
+	@Override
 	public void visitAllChildren(NodeVisitor visitor) {
 		for(Map.Entry<String, Object> e : map.entrySet()){
-			NodeFactory.create(this, e.getKey(), e.getValue()).visit(visitor);
+			NodeFactory.create(e.getValue()).visit(visitor);
 		}
 	}
 
@@ -99,12 +124,12 @@ public class MapNode extends AbstractNode{
 
 	public Node addChild(String name, Object value){
 		map.put(name, value);
-		return NodeFactory.create(this, name, value);
+		return NodeFactory.create(value);
 	}
 
 	@Override
 	public Node createEmpty() {
-		return new MapNode(getParent(), getChildId(), new LinkedHashMap<String, Object>());
+		return new MapNode(new LinkedHashMap<String, Object>());
 	}
 
 	@Override

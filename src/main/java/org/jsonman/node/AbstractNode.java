@@ -15,21 +15,13 @@
  */
 package org.jsonman.node;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jsonman.Node;
 import org.jsonman.NodeVisitor;
+import org.jsonman.Reference;
 
 public abstract class AbstractNode implements Node{
 	public AbstractNode(){
-	}
-
-	public AbstractNode(Node parent, Object childId) {
-		this.parent = parent;
-		this.childId = childId;
-	}
-
-	@Override
-	public boolean isRoot() {
-		return parent == null;
 	}
 
 	@Override
@@ -63,22 +55,17 @@ public abstract class AbstractNode implements Node{
 	}
 
 	@Override
-	public Node getParent(){
-		return parent;
-	}
-
-	@Override
-	public Object getChildId(){
-		return childId;
-	}
-
-	@Override
 	public Node getChild(Object childId){
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Iterable<Node> getAllChildren() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Iterable<Pair<Reference, Node>> getChildren() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -96,7 +83,4 @@ public abstract class AbstractNode implements Node{
 	public void appendChild(String childId, Node child) {
 		throw new UnsupportedOperationException();
 	}
-
-	private Node parent;
-	private Object childId;
 }

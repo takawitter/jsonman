@@ -15,26 +15,38 @@
  */
 package org.jsonman;
 
+import java.util.Deque;
+
 import org.apache.commons.lang3.tuple.Pair;
+import org.jsonman.node.ArrayNode;
+import org.jsonman.node.MapNode;
 
-public interface Node {
-	boolean isMap();
-	boolean isArray();
-	boolean isString();
-	boolean isNumber();
-	boolean isBoolean();
-	boolean isNull();
+public class NodeRecursiveVisitor extends NodeAdapter{
+	public NodeRecursiveVisitor(Deque<Reference> paths){
+		this.paths = paths;
+	}
 
-	Object getValue();
-	void setValue(Object value);
-	void visit(NodeVisitor visitor);
+	@Override
+	public void accept(ArrayNode node) {
+		acceptContainer(node);
+	}
 
-	Node getChild(Object childId);
-	Iterable<Node> getAllChildren();
-	Iterable<Pair<Reference, Node>> getChildren();
-	void visitAllChildren(NodeVisitor visitor);
+	@Override
+	public void accept(MapNode node) {
+		acceptContainer(node);
+	}
 
-	Node createEmpty();
-	void appendChild(String childId, Node child);
-	void appendChild(Node child);
+	protected Deque<Reference> getPaths(){
+		return paths;
+	}
+
+	private void acceptContainer(Node node){
+		for(Pair<Reference, Node> e :node.getChildren()){
+			paths.addLast(e.getKey());
+			e.getValue().visit(this);
+			paths.removeLast();
+		}
+	}
+
+	private Deque<Reference> paths;
 }

@@ -24,11 +24,6 @@ public class StringNode extends AbstractNode{
 		this.value = value;
 	}
 
-	public StringNode(Node parent, Object childId, String value){
-		super(parent, childId);
-		this.value = value;
-	}
-
 	@Override
 	public boolean isString(){
 		return true;
@@ -55,7 +50,7 @@ public class StringNode extends AbstractNode{
 
 	@Override
 	public Node createEmpty() {
-		return new StringNode(getParent(), getChildId(), null);
+		return new StringNode(null);
 	}
 
 	private String value;
