@@ -31,7 +31,7 @@ public class NodeRecursiveVisitor extends NodeAdapter{
 	@Override
 	public void accept(ArrayNode node) {
 		int i = 0;
-		for(Node e : node.getAllChildren()){
+		for(Node e : node.getChildren()){
 			paths.addLast(new ArrayReference(i++));
 			e.visit(this);
 			paths.removeLast();
@@ -40,7 +40,7 @@ public class NodeRecursiveVisitor extends NodeAdapter{
 
 	@Override
 	public void accept(MapNode node) {
-		for(Pair<String, Node> e : node.getChildren()){
+		for(Pair<String, Node> e : node.getChildrenWithName()){
 			paths.addLast(new MapReference(e.getKey()));
 			e.getValue().visit(this);
 			paths.removeLast();

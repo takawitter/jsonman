@@ -49,15 +49,14 @@ public class MapNode extends AbstractNode{
 		this.map = map;
 	}
 
-	@Override
-	public Node getChild(Object childId) {
+	public Node getChild(String childId) {
 		Object value = map.get(childId);
 		if(value == null) return null;
 		return NodeFactory.create(value);
 	}
 
 	@Override
-	public Iterable<Node> getAllChildren() {
+	public Iterable<Node> getChildren() {
 		return new Iterable<Node>() {
 			@Override
 			public Iterator<Node> iterator() {
@@ -81,7 +80,7 @@ public class MapNode extends AbstractNode{
 		};
 	}
 
-	public Iterable<Pair<String, Node>> getChildren() {
+	public Iterable<Pair<String, Node>> getChildrenWithName() {
 		return new Iterable<Pair<String, Node>>() {
 			@Override
 			public Iterator<Pair<String, Node>> iterator() {
@@ -108,7 +107,7 @@ public class MapNode extends AbstractNode{
 	}
 
 	@Override
-	public void visitAllChildren(NodeVisitor visitor) {
+	public void visitChildren(NodeVisitor visitor) {
 		for(Map.Entry<String, Object> e : map.entrySet()){
 			NodeFactory.create(e.getValue()).visit(visitor);
 		}
@@ -129,9 +128,8 @@ public class MapNode extends AbstractNode{
 		return new MapNode(new LinkedHashMap<String, Object>());
 	}
 
-	@Override
-	public void appendChild(String childId, Node child) {
-		map.put(childId, child.getValue());
+	public void appendChild(String name, Node child) {
+		map.put(name, child.getValue());
 	}
 
 	private Map<String, Object> map;

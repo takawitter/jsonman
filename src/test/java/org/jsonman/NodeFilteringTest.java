@@ -56,9 +56,9 @@ public class NodeFilteringTest {
 		Iterator<Reference> it = paths.iterator();
 		Reference r = it.next();
 		if(target.isArray()){
-			target.appendChild(createNode(it, node));
+			((ArrayNode)target).appendChild(createNode(it, node));
 		} else if(target.isMap()){
-			target.appendChild(r.getId().toString(), createNode(it, node));
+			((MapNode)target).appendChild(r.getId().toString(), createNode(it, node));
 		} else{
 			return;
 		}
@@ -74,11 +74,13 @@ public class NodeFilteringTest {
 		Node n = null;
 		Object id = ref.getId();
 		if(id instanceof Integer){
-			n = new ArrayNode(new ArrayList<>());
-			n.appendChild(child);
+			ArrayNode an = new ArrayNode(new ArrayList<>());
+			an.appendChild(child);
+			n = an;
 		} else if(id instanceof String){
-			n = new MapNode(new LinkedHashMap<String, Object>());
-			n.appendChild((String)id, child);
+			MapNode mn = new MapNode(new LinkedHashMap<String, Object>());
+			mn.appendChild((String)id, child);
+			n = mn;
 		} else{
 			return null;
 		}

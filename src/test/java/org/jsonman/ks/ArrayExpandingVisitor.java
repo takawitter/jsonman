@@ -20,6 +20,6 @@ import org.jsonman.node.ArrayNode;
 
 public class ArrayExpandingVisitor extends NodeAdapter{
 	public void accept(ArrayNode node){
-		node.visitAllChildren(this);
+		node.visitChildren(this);
 	}
 }

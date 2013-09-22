@@ -53,27 +53,12 @@ public abstract class AbstractNode implements Node{
 	}
 
 	@Override
-	public Node getChild(Object childId){
+	public Iterable<Node> getChildren() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Iterable<Node> getAllChildren() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void visitAllChildren(final NodeVisitor visitor) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void appendChild(Node child) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void appendChild(String childId, Node child) {
+	public void visitChildren(final NodeVisitor visitor) {
 		throw new UnsupportedOperationException();
 	}
 }

@@ -27,11 +27,8 @@ public interface Node {
 	void setValue(Object value);
 	void visit(NodeVisitor visitor);
 
-	Node getChild(Object childId);
-	Iterable<Node> getAllChildren();
-	void visitAllChildren(NodeVisitor visitor);
+	Iterable<Node> getChildren();
+	void visitChildren(NodeVisitor visitor);
 
 	Node createEmpty();
-	void appendChild(String childId, Node child);
-	void appendChild(Node child);
 }

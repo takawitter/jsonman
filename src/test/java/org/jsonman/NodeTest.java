@@ -49,7 +49,7 @@ public class NodeTest {
 		Assert.assertFalse(n.isBoolean());
 		Assert.assertFalse(n.isNull());
 
-		Iterator<Node> it = n.getAllChildren().iterator();
+		Iterator<Node> it = n.getChildren().iterator();
 		Node node1 = it.next();
 		Assert.assertTrue(node1.isBoolean());
 		Assert.assertTrue(((BooleanNode)node1).getValue());

@@ -50,7 +50,7 @@ public class ArrayNode extends AbstractNode{
 	}
 
 	@Override
-	public Iterable<Node> getAllChildren() {
+	public Iterable<Node> getChildren() {
 		return new Iterable<Node>() {
 			@Override
 			public Iterator<Node> iterator() {
@@ -99,7 +99,7 @@ public class ArrayNode extends AbstractNode{
 	}
 */
 	@Override
-	public void visitAllChildren(NodeVisitor visitor) {
+	public void visitChildren(NodeVisitor visitor) {
 		ListIterator<Object> entries = array.listIterator();
 		while(entries.hasNext()){
 			NodeFactory.create(entries.next()).visit(visitor);
@@ -121,7 +121,6 @@ public class ArrayNode extends AbstractNode{
 		return new ArrayNode(new ArrayList<>());
 	}
 
-	@Override
 	public void appendChild(Node child) {
 		array.add(child.getValue());
 	}
