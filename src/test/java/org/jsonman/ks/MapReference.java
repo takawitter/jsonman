@@ -28,6 +28,17 @@ public class MapReference implements Reference{
 	}
 
 	@Override
+	public boolean isArray() {
+		return false;
+	}
+
+	@Override
+	public boolean isMap() {
+		return true;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public String getId(){
 		return id;
 	}

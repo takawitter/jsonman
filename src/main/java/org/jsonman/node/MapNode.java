@@ -25,6 +25,10 @@ import org.jsonman.NodeFactory;
 import org.jsonman.NodeVisitor;
 
 public class MapNode extends AbstractNode{
+	public MapNode() {
+		this.map = new LinkedHashMap<String, Object>();
+	}
+
 	public MapNode(Map<String, Object> map){
 		this.map = map;
 	}
@@ -42,17 +46,21 @@ public class MapNode extends AbstractNode{
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setValue(Object value){
-		setRealValue((Map<String, Object>)value);
+		setValue((Map<String, Object>)value);
 	}
 
-	public void setRealValue(Map<String, Object> map) {
+	public void setValue(Map<String, Object> map) {
 		this.map = map;
 	}
 
-	public Node getChild(String childId) {
-		Object value = map.get(childId);
+	public Node getChild(String name) {
+		Object value = map.get(name);
 		if(value == null) return null;
 		return NodeFactory.create(value);
+	}
+
+	public void setChild(String name, Node value){
+		map.put(name, value.getValue());
 	}
 
 	@Override
@@ -130,6 +138,13 @@ public class MapNode extends AbstractNode{
 
 	public void appendChild(String name, Node child) {
 		map.put(name, child.getValue());
+	}
+
+	public void mergeValue(MapNode target){
+		Map<String, Object> tvalue = target.getValue();
+		for(Map.Entry<String, Object> entry : tvalue.entrySet()){
+			map.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	private Map<String, Object> map;

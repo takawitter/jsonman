@@ -61,4 +61,10 @@ public abstract class AbstractNode implements Node{
 	public void visitChildren(final NodeVisitor visitor) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends Node> T cast() {
+		return (T)this;
+	}
 }

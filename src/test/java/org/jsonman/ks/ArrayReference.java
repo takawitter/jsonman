@@ -28,6 +28,17 @@ public class ArrayReference implements Reference{
 	}
 
 	@Override
+	public boolean isMap() {
+		return false;
+	}
+
+	@Override
+	public boolean isArray() {
+		return true;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public Integer getId(){
 		return id;
 	}

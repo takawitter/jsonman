@@ -29,6 +29,8 @@ public class NodeFactory {
 	public static Node create(Object value){
 		if(value == null){
 			return new StringNode(null);
+		} else if(value instanceof Node){
+			return (Node)value;
 		} else if(value instanceof List){
 			return new ArrayNode((List<Object>)value);
 		} else if(value instanceof Map){

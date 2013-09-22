@@ -17,6 +17,7 @@ package org.jsonman;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -24,10 +25,15 @@ import java.util.LinkedList;
 
 import net.arnx.jsonic.JSON;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.jsonman.ks.ArrayReference;
 import org.jsonman.ks.MapReference;
 import org.jsonman.ks.NodeFilter;
+import org.jsonman.ks.NodeFinder;
 import org.jsonman.ks.NodeRecursiveVisitor;
+import org.jsonman.ks.NodeSetter;
 import org.jsonman.ks.Reference;
+import org.jsonman.ks.function.BiConsumer;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 import org.jsonman.node.StringNode;
@@ -35,6 +41,67 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class NodeFilteringTest {
+	@Test
+	public void test_find() throws Exception{
+		@SuppressWarnings("rawtypes")
+		final Pair[] expecteds = {
+				Pair.of("/0/attributes/0/name", "StringNode"),
+				Pair.of("/0/attributes/1/name", "StringNode"),
+				Pair.of("/1/attributes/0/name", "StringNode"),
+				Pair.of("/1/attributes/1/name", "StringNode"),
+				Pair.of("/2/attributes/0/name", "StringNode"),
+				Pair.of("/2/attributes/1/name", "StringNode"),
+		};
+		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
+			Node src = NodeFactory.create(JSON.decode(is));
+			new NodeFinder("/attributes/name").find(src, new BiConsumer<Deque<Reference>, Node>() {
+				@Override
+				public void accept(Deque<Reference> path, Node node) {
+					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
+					Assert.assertEquals("" + i, expecteds[i].getRight(), node.getClass().getSimpleName());
+					i++;
+				}
+				private int i;
+			});
+		}
+	}
+
+	private static String pathToString(Iterable<Reference> path){
+		StringBuilder b = new StringBuilder();
+		for(Reference s : path){
+			b.append("/").append(s.getId());
+		}
+		return b.toString();
+	}
+
+	@Test
+	public void test_set() throws Exception{
+		NodeSetter setter = new NodeSetter(new ArrayNode());
+		setter.setTo(
+				Arrays.asList(
+						new ArrayReference(0), new MapReference("attributes"),
+						new ArrayReference(0), new MapReference("name")
+				),
+				new StringNode("class"));
+		Assert.assertEquals(
+				"[{\"attributes\":[{\"name\":\"class\"}]}]",
+				JSON.encode(setter.getTarget().getValue())
+				);
+	}
+
+	@Test
+	public void test1() throws Exception{
+		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
+			Node src = NodeFactory.create(JSON.decode(is));
+			Node filtered = new NodeFilter("/attributes/name").filter(src);
+			Assert.assertEquals(
+					"[{\"attributes\":[{\"name\":\"class\"},{\"name\":\"id\"}]}," +
+					"{\"attributes\":[{\"name\":\"class\"},{\"name\":\"id\"}]}," +
+					"{\"attributes\":[{\"name\":\"class\"},{\"name\":\"id\"}]}]",
+					JSON.encode(filtered.getValue()));
+		}
+	}
+
 //	@Test
 	public void test2() throws Exception{
 		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){

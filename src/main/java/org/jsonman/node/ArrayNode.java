@@ -25,6 +25,10 @@ import org.jsonman.NodeFactory;
 import org.jsonman.NodeVisitor;
 
 public class ArrayNode extends AbstractNode{
+	public ArrayNode() {
+		this.array = new ArrayList<>();
+	}
+
 	public ArrayNode(List<Object> array){
 		this.array = array;
 	}
@@ -42,11 +46,27 @@ public class ArrayNode extends AbstractNode{
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setValue(Object value){
-		setRealValue((List<Object>)value);
+		setValue((List<Object>)value);
 	}
 
-	public void setRealValue(List<Object> array) {
+	public void setValue(List<Object> array) {
 		this.array = array;
+	}
+
+	public Node getChild(int index){
+		if(index >= array.size()) return null;
+		else return NodeFactory.create(array.get(index));
+	}
+
+	public void setChild(int index, Node child){
+		if(index < array.size()){
+			array.set(index, child.getValue());
+		} else{
+			for(int i = array.size(); i < index; i++){
+				array.add(null);
+			}
+			array.add(child.getValue());
+		}
 	}
 
 	@Override

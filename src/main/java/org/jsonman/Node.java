@@ -30,5 +30,6 @@ public interface Node {
 	Iterable<Node> getChildren();
 	void visitChildren(NodeVisitor visitor);
 
+	<T extends Node> T cast();
 	Node createEmpty();
 }
