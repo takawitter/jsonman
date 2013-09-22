@@ -35,7 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class NodeFilteringTest {
-	@Test
+//	@Test
 	public void test2() throws Exception{
 		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
 			Node src = NodeFactory.create(JSON.decode(is));
