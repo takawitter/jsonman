@@ -36,7 +36,6 @@ public class NodeTest {
 		Node n = NodeFactory.create(JSON.decode(
 				"[true,2,[1,2,3],{\"name1\":4,\"name2\":[{\"name2name1\":5}],\"name3\":{}}]"
 				));
-		Assert.assertTrue(n.isRoot());
 		Assert.assertTrue(n.isArray());
 		Assert.assertFalse(n.isMap());
 		Assert.assertFalse(n.isString());

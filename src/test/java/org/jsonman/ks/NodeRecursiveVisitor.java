@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman;
+package org.jsonman.ks;
 
 import java.util.Deque;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jsonman.Node;
+import org.jsonman.NodeAdapter;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 
@@ -28,24 +30,25 @@ public class NodeRecursiveVisitor extends NodeAdapter{
 
 	@Override
 	public void accept(ArrayNode node) {
-		acceptContainer(node);
+		int i = 0;
+		for(Node e : node.getAllChildren()){
+			paths.addLast(new ArrayReference(i++));
+			e.visit(this);
+			paths.removeLast();
+		}
 	}
 
 	@Override
 	public void accept(MapNode node) {
-		acceptContainer(node);
+		for(Pair<String, Node> e : node.getChildren()){
+			paths.addLast(new MapReference(e.getKey()));
+			e.getValue().visit(this);
+			paths.removeLast();
+		}
 	}
 
 	protected Deque<Reference> getPaths(){
 		return paths;
-	}
-
-	private void acceptContainer(Node node){
-		for(Pair<Reference, Node> e :node.getChildren()){
-			paths.addLast(e.getKey());
-			e.getValue().visit(this);
-			paths.removeLast();
-		}
 	}
 
 	private Deque<Reference> paths;

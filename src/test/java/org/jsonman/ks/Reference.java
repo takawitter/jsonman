@@ -1,6 +1,5 @@
-package org.jsonman;
+package org.jsonman.ks;
 
 public interface Reference {
-	Node getParent();
 	Object getId();
 }

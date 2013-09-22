@@ -20,11 +20,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.jsonman.MapReference;
 import org.jsonman.Node;
 import org.jsonman.NodeFactory;
 import org.jsonman.NodeVisitor;
-import org.jsonman.Reference;
 
 public class MapNode extends AbstractNode{
 	public MapNode(Map<String, Object> map){
@@ -83,22 +81,21 @@ public class MapNode extends AbstractNode{
 		};
 	}
 
-	@Override
-	public Iterable<Pair<Reference, Node>> getChildren() {
-		return new Iterable<Pair<Reference, Node>>() {
+	public Iterable<Pair<String, Node>> getChildren() {
+		return new Iterable<Pair<String, Node>>() {
 			@Override
-			public Iterator<Pair<Reference, Node>> iterator() {
-				return new Iterator<Pair<Reference, Node>>() {
+			public Iterator<Pair<String, Node>> iterator() {
+				return new Iterator<Pair<String, Node>>() {
 					@Override
 					public boolean hasNext() {
 						return entries.hasNext();
 					}
 					@Override
-					public Pair<Reference, Node> next() {
+					public Pair<String, Node> next() {
 						Map.Entry<String, Object> e = entries.next();
-						String id = e.getKey();
-						Object value = e.getValue();
-						return Pair.of((Reference)new MapReference(MapNode.this, id), NodeFactory.create(value));
+						return Pair.of(
+								e.getKey(),
+								NodeFactory.create(e.getValue()));
 					}
 					@Override
 					public void remove() {

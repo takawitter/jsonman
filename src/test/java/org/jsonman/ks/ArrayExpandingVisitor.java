@@ -13,25 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman;
+package org.jsonman.ks;
 
-public interface Node {
-	boolean isMap();
-	boolean isArray();
-	boolean isString();
-	boolean isNumber();
-	boolean isBoolean();
-	boolean isNull();
+import org.jsonman.NodeAdapter;
+import org.jsonman.node.ArrayNode;
 
-	Object getValue();
-	void setValue(Object value);
-	void visit(NodeVisitor visitor);
-
-	Node getChild(Object childId);
-	Iterable<Node> getAllChildren();
-	void visitAllChildren(NodeVisitor visitor);
-
-	Node createEmpty();
-	void appendChild(String childId, Node child);
-	void appendChild(Node child);
+public class ArrayExpandingVisitor extends NodeAdapter{
+	public void accept(ArrayNode node){
+		node.visitAllChildren(this);
+	}
 }

@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman;
+package org.jsonman.ks;
 
-import org.jsonman.node.ArrayNode;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class ArrayExpandingVisitor extends NodeAdapter{
-	public void accept(ArrayNode node){
-		node.visitAllChildren(this);
+public class MapReference implements Reference{
+	public MapReference(String id){
+		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public String getId(){
+		return id;
+	}
+
+	private String id;
 }

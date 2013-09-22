@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman;
+package org.jsonman.ks;
 
-public interface Node {
-	boolean isMap();
-	boolean isArray();
-	boolean isString();
-	boolean isNumber();
-	boolean isBoolean();
-	boolean isNull();
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-	Object getValue();
-	void setValue(Object value);
-	void visit(NodeVisitor visitor);
+public class ArrayReference implements Reference{
+	public ArrayReference(Integer id){
+		this.id = id;
+	}
 
-	Node getChild(Object childId);
-	Iterable<Node> getAllChildren();
-	void visitAllChildren(NodeVisitor visitor);
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 
-	Node createEmpty();
-	void appendChild(String childId, Node child);
-	void appendChild(Node child);
+	@Override
+	public Integer getId(){
+		return id;
+	}
+
+	private Integer id;
 }

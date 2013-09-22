@@ -15,10 +15,8 @@
  */
 package org.jsonman.node;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.jsonman.Node;
 import org.jsonman.NodeVisitor;
-import org.jsonman.Reference;
 
 public abstract class AbstractNode implements Node{
 	public AbstractNode(){
@@ -61,11 +59,6 @@ public abstract class AbstractNode implements Node{
 
 	@Override
 	public Iterable<Node> getAllChildren() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Iterable<Pair<Reference, Node>> getChildren() {
 		throw new UnsupportedOperationException();
 	}
 

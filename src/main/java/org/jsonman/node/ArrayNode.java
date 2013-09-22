@@ -20,12 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.jsonman.ArrayReference;
 import org.jsonman.Node;
 import org.jsonman.NodeFactory;
 import org.jsonman.NodeVisitor;
-import org.jsonman.Reference;
 
 public class ArrayNode extends AbstractNode{
 	public ArrayNode(List<Object> array){
@@ -75,8 +72,7 @@ public class ArrayNode extends AbstractNode{
 			}
 		};
 	}
-
-	@Override
+/*
 	public Iterable<Pair<Reference, Node>> getChildren() {
 		return new Iterable<Pair<Reference, Node>>() {
 			@Override
@@ -88,9 +84,9 @@ public class ArrayNode extends AbstractNode{
 					}
 					@Override
 					public Pair<Reference, Node> next() {
-						Integer id = entries.nextIndex();
-						Object v = entries.next();
-						return Pair.of((Reference)new ArrayReference(ArrayNode.this, id), NodeFactory.create(v));
+						return Pair.of(
+								(Reference)new ArrayReference(entries.nextIndex()),
+								NodeFactory.create(entries.next()));
 					}
 					@Override
 					public void remove() {
@@ -101,7 +97,7 @@ public class ArrayNode extends AbstractNode{
 			}
 		};
 	}
-
+*/
 	@Override
 	public void visitAllChildren(NodeVisitor visitor) {
 		ListIterator<Object> entries = array.listIterator();
