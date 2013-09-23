@@ -17,7 +17,6 @@ package org.jsonman.ks;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -27,7 +26,6 @@ import net.arnx.jsonic.JSON;
 
 import org.jsonman.Node;
 import org.jsonman.NodeFactory;
-import org.jsonman.finder.ArrayReference;
 import org.jsonman.finder.MapReference;
 import org.jsonman.finder.RecursiveVisitor;
 import org.jsonman.finder.Reference;
@@ -38,47 +36,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class NodeFilteringTest {
-	@Test
-	public void test_set() throws Exception{
-		NodeSetter setter = new NodeSetter(new ArrayNode());
-		setter.setTo(
-				Arrays.asList(
-						new ArrayReference(0), new MapReference("attributes"),
-						new ArrayReference(0), new MapReference("name")
-				),
-				new StringNode("class"));
-		Assert.assertEquals(
-				"[{\"attributes\":[{\"name\":\"class\"}]}]",
-				JSON.encode(setter.getTarget().getValue())
-				);
-	}
-
-	@Test
-	public void test1() throws Exception{
-		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("/org/jsonman/NodeFilteringTest_1.json")){
-			Node src = NodeFactory.create(JSON.decode(is));
-			Node filtered = new NodeFilter("/attributes/name").filter(src);
-			Assert.assertEquals(
-					"[{\"attributes\":[{\"name\":\"class\"},{\"name\":\"id\"}]}," +
-					"{\"attributes\":[{\"name\":\"class\"},{\"name\":\"id\"}]}," +
-					"{\"attributes\":[{\"name\":\"class\"},{\"name\":\"id\"}]}]",
-					JSON.encode(filtered.getValue()));
-		}
-	}
-
-	@Test
-	public void test2() throws Exception{
-		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("/org/jsonman/NodeFilteringTest_1.json")){
-			Node src = NodeFactory.create(JSON.decode(is));
-			Node filtered = new NodeFilter("/attributes[name=class]").filter(src);
-			Assert.assertEquals(
-					"[{\"attributes\":[{\"name\":\"class\",\"value\":\"bodyclass\"}]}," +
-					"{\"attributes\":[{\"name\":\"class\",\"value\":\"h1class\"}]}," +
-					"{\"attributes\":[{\"name\":\"class\",\"value\":\"h2class\"}]}]",
-					JSON.encode(filtered.getValue()));
-		}
-	}
-
 	static void copyTo(Node target, Deque<Reference> paths, Node node){
 		System.out.println();
 		for(Reference r : paths){
