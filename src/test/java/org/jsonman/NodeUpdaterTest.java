@@ -26,11 +26,11 @@ import org.jsonman.node.StringNode;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class NodeSetterTest {
+public class NodeUpdaterTest {
 	@Test
 	public void test_set() throws Exception{
-		NodeSetter setter = new NodeSetter(new ArrayNode());
-		setter.setTo(
+		NodeUpdater setter = new NodeUpdater(new ArrayNode());
+		setter.update(
 				Arrays.asList(
 						new ArrayReference(0), new MapReference("attributes"),
 						new ArrayReference(0), new MapReference("name")

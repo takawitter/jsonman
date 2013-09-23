@@ -21,8 +21,8 @@ import org.jsonman.finder.Reference;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 
-public class NodeSetter {
-	public NodeSetter(Node target){
+public class NodeUpdater {
+	public NodeUpdater(Node target){
 		this.target = target;
 	}
 
@@ -30,8 +30,8 @@ public class NodeSetter {
 		return target;
 	}
 
-	public void setTo(Iterable<Reference> paths, Node node){
-		final Iterator<Reference> it = paths.iterator();
+	public void update(Iterable<Reference> path, Node node){
+		final Iterator<Reference> it = path.iterator();
 		Node t = target;
 		while(true){
 			Reference r = it.next();
