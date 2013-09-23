@@ -5,7 +5,7 @@ import java.util.Deque;
 import net.arnx.jsonic.JSON;
 
 import org.jsonman.Node;
-import org.jsonman.ks.function.BiConsumer;
+import org.jsonman.ks.util.function.BiConsumer;
 
 public class NodeFilter {
 	public NodeFilter(String... paths){
@@ -17,15 +17,15 @@ public class NodeFilter {
 		for(String p : paths){
 			new NodeFinder(p).find(src, new BiConsumer<Deque<Reference>, Node>(){
 				@Override
-				public void accept(Deque<Reference> paths, Node node) {
+				public void accept(Deque<Reference> path, Node node) {
 					StringBuilder b = new StringBuilder();
-					for(Reference s : paths){
+					for(Reference s : path){
 						b.append("/").append(s.getId());
 					}
 					System.out.println(String.format(
 							"found!  path:%s  node:%s.",
 							b, node));
-					setter.setTo(paths, node);
+					setter.setTo(path, node);
 					System.out.println(JSON.encode(setter.getTarget().getValue()));
 				}
 			});

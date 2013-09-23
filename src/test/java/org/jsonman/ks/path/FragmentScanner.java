@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class PathScanner implements Iterator<Fragment>, Cloneable{
-	protected PathScanner(Fragment[] fragments, int index) {
+public class FragmentScanner implements Iterator<Fragment>, Cloneable{
+	protected FragmentScanner(Fragment[] fragments, int index) {
 		this.fragments = fragments;
 		this.index = index;
 	}
 
-	public PathScanner(String path){
+	public FragmentScanner(String path){
 		this.fragments = parsePath(path);
 		this.index = 0;
 	}
 
 	@Override
-	public PathScanner clone(){
-		return new PathScanner(this.fragments, this.index);
+	public FragmentScanner clone(){
+		return new FragmentScanner(this.fragments, this.index);
 	}
 
 	public boolean hasNext(){
@@ -59,7 +59,25 @@ public class PathScanner implements Iterator<Fragment>, Cloneable{
 		text = text.substring(bs + 1, text.length() - 1);
 		String[] nv = text.split("=");
 		if(nv.length != 2) throw new RuntimeException("invalid format: " + text);
-		return new Fragment(name, new Condition(nv[0], nv[1], Condition.Operator.COMPLETEMATCH));
+		Object v = toValue(nv[1]);
+		return new Fragment(name, new Condition(nv[0], v, Condition.Operator.COMPLETEMATCH));
+	}
+
+	private static Object toValue(String value){
+		if(value.startsWith("'") && value.endsWith("'")){
+			return value.substring(1, value.length() - 1);
+		} else if(value.equals("true")){
+			return true;
+		} else if(value.equals("false")){
+			return false;
+		} else if(value.equals("null")){
+			return null;
+		} else if(value.matches("\\d+")){
+			return Integer.parseInt(value);
+		} else if(value.matches("\\d+\\.\\d+")){
+			return Double.parseDouble(value);
+		}
+		return value;
 	}
 
 	private final Fragment[] fragments;
