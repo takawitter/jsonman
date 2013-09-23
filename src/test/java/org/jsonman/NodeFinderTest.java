@@ -32,7 +32,7 @@ public class NodeFinderTest {
 	@Test
 	public void test_1() throws Exception{
 		Node src = NodeFactory.create(JSON.decode("{\"name\":\"value\"}"));
-		new NodeFinder("/name").find(src, new BiConsumer<Deque<Reference>, Node>() {
+		new NodeFinder(src).find("/name", new BiConsumer<Deque<Reference>, Node>() {
 				@Override
 				public void accept(Deque<Reference> path, Node node) {
 					Assert.assertEquals(1, path.size());
@@ -53,7 +53,7 @@ public class NodeFinderTest {
 				Pair.of("/1/age", 40),
 		};
 		Node src = NodeFactory.create(JSON.decode("[{\"name\":\"john\",\"age\":30},{\"name\":\"bob\",\"age\":40}]"));
-		new NodeFinder("/age").find(src, new BiConsumer<Deque<Reference>, Node>() {
+		new NodeFinder(src).find("/age", new BiConsumer<Deque<Reference>, Node>() {
 				@Override
 				public void accept(Deque<Reference> path, Node node) {
 					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
@@ -77,7 +77,7 @@ public class NodeFinderTest {
 		};
 		try(InputStream is = NodeFinderTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
 			Node src = NodeFactory.create(JSON.decode(is));
-			new NodeFinder("/attributes/name").find(src, new BiConsumer<Deque<Reference>, Node>() {
+			new NodeFinder(src).find("/attributes/name", new BiConsumer<Deque<Reference>, Node>() {
 				@Override
 				public void accept(Deque<Reference> path, Node node) {
 					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
@@ -99,7 +99,7 @@ public class NodeFinderTest {
 		};
 		try(InputStream is = NodeFinderTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
 			Node src = NodeFactory.create(JSON.decode(is));
-			new NodeFinder("/attributes[name='class']").find(src, new BiConsumer<Deque<Reference>, Node>() {
+			new NodeFinder(src).find("/attributes[name='class']", new BiConsumer<Deque<Reference>, Node>() {
 				@Override
 				public void accept(Deque<Reference> path, Node node) {
 					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));

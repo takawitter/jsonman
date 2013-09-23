@@ -34,11 +34,11 @@ import org.jsonman.node.StringNode;
 import org.jsonman.util.BiConsumer;
 
 public class NodeFinder {
-	public NodeFinder(String path){
-		this.path = path;
+	public NodeFinder(Node src){
+		this.src = src;
 	}
 
-	public void find(Node src, BiConsumer<Deque<Reference>, Node> consumer){
+	public void find(String path, BiConsumer<Deque<Reference>, Node> consumer){
 		find(src, FragmentScanner.parsePath(path), consumer);
 	}
 
@@ -116,5 +116,5 @@ public class NodeFinder {
 		});
 	}
 
-	private String path;
+	private Node src;
 }

@@ -28,7 +28,7 @@ public class NodeFilter {
 	public Node filter(Node src){
 		final NodeUpdater setter = new NodeUpdater(src.createEmpty());
 		for(String p : paths){
-			new NodeFinder(p).find(src, new BiConsumer<Deque<Reference>, Node>(){
+			new NodeFinder(src).find(p, new BiConsumer<Deque<Reference>, Node>(){
 				@Override
 				public void accept(Deque<Reference> path, Node node) {
 					StringBuilder b = new StringBuilder();
