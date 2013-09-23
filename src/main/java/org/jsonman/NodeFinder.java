@@ -1,19 +1,37 @@
-package org.jsonman.ks;
+/*
+ * Copyright 2013 Takao Nakaguchi.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.jsonman;
 
 import java.util.Deque;
 import java.util.LinkedList;
 
-import org.jsonman.Node;
-import org.jsonman.ks.path.Condition;
-import org.jsonman.ks.path.Fragment;
-import org.jsonman.ks.path.FragmentScanner;
-import org.jsonman.ks.util.function.BiConsumer;
+import org.jsonman.finder.ArrayReference;
+import org.jsonman.finder.Condition;
+import org.jsonman.finder.Fragment;
+import org.jsonman.finder.FragmentScanner;
+import org.jsonman.finder.MapReference;
+import org.jsonman.finder.RecursiveVisitor;
+import org.jsonman.finder.Reference;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.BooleanNode;
 import org.jsonman.node.MapNode;
 import org.jsonman.node.NullNode;
 import org.jsonman.node.NumberNode;
 import org.jsonman.node.StringNode;
+import org.jsonman.util.BiConsumer;
 
 public class NodeFinder {
 	public NodeFinder(String path){
@@ -26,7 +44,7 @@ public class NodeFinder {
 
 	private static void find(Node src, final Fragment[] fragments, final BiConsumer<Deque<Reference>, Node> consumer){
 		if(fragments.length == 0) return;
-		src.visit(new NodeRecursiveVisitor(new LinkedList<Reference>()){
+		src.visit(new RecursiveVisitor(new LinkedList<Reference>()){
 			@Override
 			public void accept(ArrayNode node) {
 				if(condition != null){

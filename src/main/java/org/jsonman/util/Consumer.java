@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman.ks;
+package org.jsonman.util;
 
-public interface Reference {
-	boolean isMap();
-	boolean isArray();
-	<T> T getId();
+public interface Consumer<T> {
+	void accept(T value);
 }

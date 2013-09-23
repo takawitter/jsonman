@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman.ks;
+package org.jsonman.finder;
 
 import java.util.Deque;
 
@@ -23,8 +23,8 @@ import org.jsonman.NodeAdapter;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 
-public class NodeRecursiveVisitor extends NodeAdapter{
-	public NodeRecursiveVisitor(Deque<Reference> paths){
+public class RecursiveVisitor extends NodeAdapter{
+	public RecursiveVisitor(Deque<Reference> paths){
 		this.paths = paths;
 	}
 

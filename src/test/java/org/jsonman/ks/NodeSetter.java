@@ -3,6 +3,7 @@ package org.jsonman.ks;
 import java.util.Iterator;
 
 import org.jsonman.Node;
+import org.jsonman.finder.Reference;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 

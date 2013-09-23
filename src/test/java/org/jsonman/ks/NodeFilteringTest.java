@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman;
+package org.jsonman.ks;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,15 +25,12 @@ import java.util.LinkedList;
 
 import net.arnx.jsonic.JSON;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.jsonman.ks.ArrayReference;
-import org.jsonman.ks.MapReference;
-import org.jsonman.ks.NodeFilter;
-import org.jsonman.ks.NodeFinder;
-import org.jsonman.ks.NodeRecursiveVisitor;
-import org.jsonman.ks.NodeSetter;
-import org.jsonman.ks.Reference;
-import org.jsonman.ks.util.function.BiConsumer;
+import org.jsonman.Node;
+import org.jsonman.NodeFactory;
+import org.jsonman.finder.ArrayReference;
+import org.jsonman.finder.MapReference;
+import org.jsonman.finder.RecursiveVisitor;
+import org.jsonman.finder.Reference;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 import org.jsonman.node.StringNode;
@@ -41,62 +38,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class NodeFilteringTest {
-	@Test
-	public void test_find_1() throws Exception{
-		@SuppressWarnings("rawtypes")
-		final Pair[] expecteds = {
-				Pair.of("/0/attributes/0/name", "StringNode"),
-				Pair.of("/0/attributes/1/name", "StringNode"),
-				Pair.of("/1/attributes/0/name", "StringNode"),
-				Pair.of("/1/attributes/1/name", "StringNode"),
-				Pair.of("/2/attributes/0/name", "StringNode"),
-				Pair.of("/2/attributes/1/name", "StringNode"),
-		};
-		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
-			Node src = NodeFactory.create(JSON.decode(is));
-			new NodeFinder("/attributes/name").find(src, new BiConsumer<Deque<Reference>, Node>() {
-				@Override
-				public void accept(Deque<Reference> path, Node node) {
-					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
-					Assert.assertEquals("" + i, expecteds[i].getRight(), node.getClass().getSimpleName());
-					i++;
-				}
-				private int i;
-			});
-		}
-	}
-
-	@Test
-	public void test_find_2() throws Exception{
-		@SuppressWarnings("rawtypes")
-		final Pair[] expecteds = {
-				Pair.of("/0/attributes/0", "MapNode"),
-				Pair.of("/1/attributes/0", "MapNode"),
-				Pair.of("/2/attributes/0", "MapNode"),
-		};
-		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
-			Node src = NodeFactory.create(JSON.decode(is));
-			new NodeFinder("/attributes[name='class']").find(src, new BiConsumer<Deque<Reference>, Node>() {
-				@Override
-				public void accept(Deque<Reference> path, Node node) {
-					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
-					Assert.assertEquals("" + i, expecteds[i].getRight(), node.getClass().getSimpleName());
-					Assert.assertTrue(node.isMap());
-					i++;
-				}
-				private int i;
-			});
-		}
-	}
-
-	private static String pathToString(Iterable<Reference> path){
-		StringBuilder b = new StringBuilder();
-		for(Reference s : path){
-			b.append("/").append(s.getId());
-		}
-		return b.toString();
-	}
-
 	@Test
 	public void test_set() throws Exception{
 		NodeSetter setter = new NodeSetter(new ArrayNode());
@@ -114,7 +55,7 @@ public class NodeFilteringTest {
 
 	@Test
 	public void test1() throws Exception{
-		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
+		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("/org/jsonman/NodeFilteringTest_1.json")){
 			Node src = NodeFactory.create(JSON.decode(is));
 			Node filtered = new NodeFilter("/attributes/name").filter(src);
 			Assert.assertEquals(
@@ -127,7 +68,7 @@ public class NodeFilteringTest {
 
 	@Test
 	public void test2() throws Exception{
-		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
+		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("/org/jsonman/NodeFilteringTest_1.json")){
 			Node src = NodeFactory.create(JSON.decode(is));
 			Node filtered = new NodeFilter("/attributes[name=class]").filter(src);
 			Assert.assertEquals(
@@ -180,25 +121,25 @@ public class NodeFilteringTest {
 	@Test
 	public void test() throws Exception{
 		Node src = null;
-		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
+		try(InputStream is = NodeFilteringTest.class.getResourceAsStream("/org/jsonman/NodeFilteringTest_1.json")){
 			src = NodeFactory.create(JSON.decode(is));
 		}
 
 		// /attributes[name=class]
 		final Node target = src.createEmpty();
-		src.visit(new NodeRecursiveVisitor(new LinkedList<Reference>()){
+		src.visit(new RecursiveVisitor(new LinkedList<Reference>()){
 			@Override
 			public void accept(MapNode node) {
 				Node an = node.getChild("attributes");
 				if(an == null) return;
 				getPaths().addLast(new MapReference("attributes"));
-				an.visit(new NodeRecursiveVisitor(getPaths()){
+				an.visit(new RecursiveVisitor(getPaths()){
 					@Override
 					public void accept(final MapNode node) {
 						Node nn = node.getChild("name");
 						if(nn == null) return;
 						getPaths().addLast(new MapReference("name"));
-						nn.visit(new NodeRecursiveVisitor(getPaths()){
+						nn.visit(new RecursiveVisitor(getPaths()){
 							@Override
 							public void accept(StringNode vnode) {
 								if(!"class".equals(vnode.getValue())) return;

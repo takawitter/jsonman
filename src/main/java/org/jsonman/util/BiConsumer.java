@@ -13,35 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman.ks;
+package org.jsonman.util;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-public class MapReference implements Reference{
-	public MapReference(String id){
-		this.id = id;
-	}
-
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
-	@Override
-	public boolean isArray() {
-		return false;
-	}
-
-	@Override
-	public boolean isMap() {
-		return true;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public String getId(){
-		return id;
-	}
-
-	private String id;
+public interface BiConsumer<T, U> {
+	void accept(T value1, U value2);
 }

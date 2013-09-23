@@ -13,35 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jsonman.ks;
+package org.jsonman.finder;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-public class ArrayReference implements Reference{
-	public ArrayReference(Integer id){
-		this.id = id;
-	}
-
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
-	@Override
-	public boolean isMap() {
-		return false;
-	}
-
-	@Override
-	public boolean isArray() {
-		return true;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public Integer getId(){
-		return id;
-	}
-
-	private Integer id;
+public interface Reference {
+	boolean isMap();
+	boolean isArray();
+	<T> T getId();
 }

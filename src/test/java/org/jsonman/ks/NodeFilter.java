@@ -5,7 +5,9 @@ import java.util.Deque;
 import net.arnx.jsonic.JSON;
 
 import org.jsonman.Node;
-import org.jsonman.ks.util.function.BiConsumer;
+import org.jsonman.NodeFinder;
+import org.jsonman.finder.Reference;
+import org.jsonman.util.BiConsumer;
 
 public class NodeFilter {
 	public NodeFilter(String... paths){
