@@ -50,6 +50,14 @@ public class NumberNode extends AbstractNode{
 		return value;
 	}
 
+	public int getIntValue(){
+		return value.intValue();
+	}
+
+	public double getDoubleValue(){
+		return value.doubleValue();
+	}
+
 	@Override
 	public void setValue(Object value) {
 		setValue((Number)value);

@@ -6,24 +6,13 @@ JSON Manipulator Library.
 [![Build Status](https://buildhive.cloudbees.com/job/takawitter/job/jsonman/badge/icon)](https://buildhive.cloudbees.com/job/takawitter/job/jsonman/)
  **latest [jsonman-0.0.1-SNAPSHOT.jar](https://buildhive.cloudbees.com/job/takawitter/job/jsonman/ws/target/jsonman-0.0.1-SNAPSHOT.jar)**
 
-Here is the sample code:
+JSONMAN constructs light-weight tree structure from parsed JSON (Map<String, Object>) and 
+provides finding, updating and filtering function based on XPath-like expression.
+JSONMAN is designed to be used with [JSONIC](http://jsonic.sourceforge.jp/) or any JSON decoder which returns decoded JSON as Map<String, Object>.
+
+## Sample code 1: Traversing tree
 
 ```java
-package org.jsonman;
-
-import java.util.Iterator;
-
-import net.arnx.jsonic.JSON;
-
-import org.jsonman.node.ArrayNode;
-import org.jsonman.node.BooleanNode;
-import org.jsonman.node.MapNode;
-import org.jsonman.node.NullNode;
-import org.jsonman.node.NumberNode;
-import org.jsonman.node.StringNode;
-import org.junit.Assert;
-import org.junit.Test;
-
 public class NodeTest {
 	static class TestVisitor implements NodeVisitor{
 		public void visit(MapNode node) { Assert.fail();}
@@ -77,6 +66,66 @@ public class NodeTest {
 				});
 			}
 		});
+	}
+}
+```
+
+## Sample code 2: Finding node.
+
+```java
+public class NodeFinderTest {
+	@Test
+	public void test_4() throws Exception{
+		Node src = NodeFactory.create(JSON.decode("{\"people\":[{\"name\":\"john\",\"age\":20},{\"name\":\"bob\",\"age\":30}]}"));
+		new NodeFinder(src).find("/people[name=bob]", new BiConsumer<Deque<Reference>, Node>() {
+				@Override
+				public void accept(Deque<Reference> path, Node node) {
+					Assert.assertTrue(node.isMap());
+					MapNode mn = node.cast();
+					Assert.assertEquals("bob", mn.getChildValue("name"));
+					Assert.assertEquals(30, ((Number)mn.getChildValue("age")).intValue());
+				}
+			});
+	}
+}
+```
+
+## Sample code 3: Updating node.
+
+```java
+public class NodeUpdaterTest {
+	@Test
+	public void test_set() throws Exception{
+		NodeUpdater setter = new NodeUpdater(new ArrayNode());
+		setter.update(
+				Arrays.asList(
+						new ArrayReference(0), new MapReference("attributes"),
+						new ArrayReference(0), new MapReference("name")
+				),
+				new StringNode("class"));
+		Assert.assertEquals(
+				"[{\"attributes\":[{\"name\":\"class\"}]}]",
+				JSON.encode(setter.getTarget().getValue())
+				);
+	}
+}
+```
+
+## Sample code 4: Filtering node.
+
+```java
+public class NodeFilterTest {
+	@Test
+	public void test2() throws Exception{
+		try(InputStream is = NodeFilterTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
+			Node src = NodeFactory.create(JSON.decode(is));
+			Node filtered = new NodeFilter("/attributes[name=class]").filter(src);
+			Assert.assertEquals(
+					"[{\"attributes\":[{\"name\":\"class\",\"value\":\"bodyclass\"}]}," +
+					"{\"attributes\":[{\"name\":\"class\",\"value\":\"h1class\"}]}," +
+					"{\"attributes\":[{\"name\":\"class\",\"value\":\"h2class\"}]}]",
+					JSON.encode(filtered.getValue()));
+		}
 	}
 }
 ```

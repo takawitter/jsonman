@@ -22,6 +22,7 @@ import net.arnx.jsonic.JSON;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jsonman.finder.Reference;
+import org.jsonman.node.MapNode;
 import org.jsonman.node.NumberNode;
 import org.jsonman.node.StringNode;
 import org.jsonman.util.BiConsumer;
@@ -90,7 +91,21 @@ public class NodeFinderTest {
 	}
 
 	@Test
-	public void test_4_condition() throws Exception{
+	public void test_4() throws Exception{
+		Node src = NodeFactory.create(JSON.decode("{\"people\":[{\"name\":\"john\",\"age\":20},{\"name\":\"bob\",\"age\":30}]}"));
+		new NodeFinder(src).find("/people[name=bob]", new BiConsumer<Deque<Reference>, Node>() {
+				@Override
+				public void accept(Deque<Reference> path, Node node) {
+					Assert.assertTrue(node.isMap());
+					MapNode mn = node.cast();
+					Assert.assertEquals("bob", mn.getChildValue("name"));
+					Assert.assertEquals(30, ((Number)mn.getChildValue("age")).intValue());
+				}
+			});
+	}
+
+	@Test
+	public void test_5_condition() throws Exception{
 		@SuppressWarnings("rawtypes")
 		final Pair[] expecteds = {
 				Pair.of("/0/attributes/0", "MapNode"),

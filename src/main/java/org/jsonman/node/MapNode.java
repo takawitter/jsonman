@@ -75,6 +75,17 @@ public class MapNode extends AbstractNode{
 		return NodeFactory.create(value);
 	}
 
+	public Object getChildValue(String name) {
+		return map.get(name);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Node> T getChildAs(String name, Class<T> clazz) {
+		Object value = map.get(name);
+		if(value == null) return null;
+		return (T)NodeFactory.create(value);
+	}
+
 	public void setChild(String name, Node value){
 		map.put(name, value.getValue());
 	}
