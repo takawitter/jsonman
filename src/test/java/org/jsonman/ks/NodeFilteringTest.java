@@ -127,21 +127,21 @@ public class NodeFilteringTest {
 
 		// /attributes[name=class]
 		final Node target = src.createEmpty();
-		src.visit(new RecursiveVisitor(new LinkedList<Reference>()){
+		src.accept(new RecursiveVisitor(new LinkedList<Reference>()){
 			@Override
-			public void accept(MapNode node) {
+			public void visit(MapNode node) {
 				Node an = node.getChild("attributes");
 				if(an == null) return;
 				getPaths().addLast(new MapReference("attributes"));
-				an.visit(new RecursiveVisitor(getPaths()){
+				an.accept(new RecursiveVisitor(getPaths()){
 					@Override
-					public void accept(final MapNode node) {
+					public void visit(final MapNode node) {
 						Node nn = node.getChild("name");
 						if(nn == null) return;
 						getPaths().addLast(new MapReference("name"));
-						nn.visit(new RecursiveVisitor(getPaths()){
+						nn.accept(new RecursiveVisitor(getPaths()){
 							@Override
-							public void accept(StringNode vnode) {
+							public void visit(StringNode vnode) {
 								if(!"class".equals(vnode.getValue())) return;
 								copyTo(target, getPaths(), node);
 							}

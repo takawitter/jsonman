@@ -23,10 +23,10 @@ import org.jsonman.node.NumberNode;
 import org.jsonman.node.StringNode;
 
 public interface NodeVisitor {
-	void accept(ArrayNode node);
-	void accept(MapNode node);
-	void accept(StringNode node);
-	void accept(NumberNode node);
-	void accept(BooleanNode node);
-	void accept(NullNode node);
+	void visit(ArrayNode node);
+	void visit(MapNode node);
+	void visit(StringNode node);
+	void visit(NumberNode node);
+	void visit(BooleanNode node);
+	void visit(NullNode node);
 }

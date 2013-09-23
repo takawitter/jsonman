@@ -44,9 +44,9 @@ public class NodeFinder {
 
 	private static void find(Node src, final Fragment[] fragments, final BiConsumer<Deque<Reference>, Node> consumer){
 		if(fragments.length == 0) return;
-		src.visit(new RecursiveVisitor(new LinkedList<Reference>()){
+		src.accept(new RecursiveVisitor(new LinkedList<Reference>()){
 			@Override
-			public void accept(ArrayNode node) {
+			public void visit(ArrayNode node) {
 				if(condition != null){
 					int i = 0;
 					for(Node child : node.getChildren()){
@@ -62,16 +62,16 @@ public class NodeFinder {
 						}
 						if(canVisit){
 							getPaths().addLast(new ArrayReference(i++));
-							child.visit(this);
+							child.accept(this);
 							getPaths().removeLast();
 						}
 					}
 				} else{
-					super.accept(node);
+					super.visit(node);
 				}
 			}
 			@Override
-			public void accept(MapNode node) {
+			public void visit(MapNode node) {
 				if(condition != null){
 					if(!condition.matched(node.getChild(condition.getName()))) return;
 				}
@@ -85,25 +85,25 @@ public class NodeFinder {
 				getPaths().addLast(new MapReference(f.getName()));
 				condition = f.getCondition();
 				nest++;
-				child.visit(this);
+				child.accept(this);
 				nest--;
 				condition = null;
 				getPaths().removeLast();
 			}
 			@Override
-			public void accept(BooleanNode node) {
+			public void visit(BooleanNode node) {
 				acceptLeaf(node);
 			}
 			@Override
-			public void accept(NullNode node) {
+			public void visit(NullNode node) {
 				acceptLeaf(node);
 			}
 			@Override
-			public void accept(NumberNode node) {
+			public void visit(NumberNode node) {
 				acceptLeaf(node);
 			}
 			@Override
-			public void accept(StringNode node) {
+			public void visit(StringNode node) {
 				acceptLeaf(node);
 			}
 			private void acceptLeaf(Node node){

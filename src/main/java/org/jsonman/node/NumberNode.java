@@ -44,8 +44,8 @@ public class NumberNode extends AbstractNode{
 	}
 
 	@Override
-	public void visit(NodeVisitor visitor) {
-		visitor.accept(this);
+	public void accept(NodeVisitor visitor) {
+		visitor.visit(this);
 	}
 
 	@Override

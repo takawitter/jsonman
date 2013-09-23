@@ -76,17 +76,17 @@ public class Condition {
 
 	public boolean matched(Node node){
 		final Holder<Boolean> rv = new Holder<>(false);
-		node.visit(new NodeAdapter() {
+		node.accept(new NodeAdapter() {
 			@Override
-			public void accept(BooleanNode node) {
+			public void visit(BooleanNode node) {
 				rv.set(value.equals(node.getValue()));
 			}
 			@Override
-			public void accept(NumberNode node) {
+			public void visit(NumberNode node) {
 				rv.set(value.equals(node.getValue()));
 			}
 			@Override
-			public void accept(StringNode node) {
+			public void visit(StringNode node) {
 				rv.set(value.equals(node.getValue()));
 			}
 		});

@@ -29,20 +29,20 @@ public class RecursiveVisitor extends NodeAdapter{
 	}
 
 	@Override
-	public void accept(ArrayNode node) {
+	public void visit(ArrayNode node) {
 		int i = 0;
 		for(Node e : node.getChildren()){
 			paths.addLast(new ArrayReference(i++));
-			e.visit(this);
+			e.accept(this);
 			paths.removeLast();
 		}
 	}
 
 	@Override
-	public void accept(MapNode node) {
+	public void visit(MapNode node) {
 		for(Pair<String, Node> e : node.getChildrenWithName()){
 			paths.addLast(new MapReference(e.getKey()));
-			e.getValue().visit(this);
+			e.getValue().accept(this);
 			paths.removeLast();
 		}
 	}

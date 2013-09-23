@@ -23,10 +23,10 @@ import org.jsonman.node.NumberNode;
 import org.jsonman.node.StringNode;
 
 public class NodeAdapter implements NodeVisitor{
-	public void accept(MapNode node){}
-	public void accept(ArrayNode node){}
-	public void accept(StringNode node){}
-	public void accept(NumberNode node){}
-	public void accept(BooleanNode node){}
-	public void accept(NullNode node){}
+	public void visit(MapNode node){}
+	public void visit(ArrayNode node){}
+	public void visit(StringNode node){}
+	public void visit(NumberNode node){}
+	public void visit(BooleanNode node){}
+	public void visit(NullNode node){}
 }

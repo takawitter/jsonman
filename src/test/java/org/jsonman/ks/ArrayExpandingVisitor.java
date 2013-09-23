@@ -15,11 +15,14 @@
  */
 package org.jsonman.ks;
 
+import org.jsonman.Node;
 import org.jsonman.NodeAdapter;
 import org.jsonman.node.ArrayNode;
 
 public class ArrayExpandingVisitor extends NodeAdapter{
-	public void accept(ArrayNode node){
-		node.visitChildren(this);
+	public void visit(ArrayNode node){
+		for(Node child : node.getChildren()){
+			child.accept(this);
+		}
 	}
 }

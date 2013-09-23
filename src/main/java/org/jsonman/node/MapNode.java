@@ -115,15 +115,8 @@ public class MapNode extends AbstractNode{
 	}
 
 	@Override
-	public void visitChildren(NodeVisitor visitor) {
-		for(Map.Entry<String, Object> e : map.entrySet()){
-			NodeFactory.create(e.getValue()).visit(visitor);
-		}
-	}
-
-	@Override
-	public void visit(NodeVisitor visitor) {
-		visitor.accept(this);
+	public void accept(NodeVisitor visitor) {
+		visitor.visit(this);
 	}
 
 	public Node addChild(String name, Object value){

@@ -118,17 +118,10 @@ public class ArrayNode extends AbstractNode{
 		};
 	}
 */
-	@Override
-	public void visitChildren(NodeVisitor visitor) {
-		ListIterator<Object> entries = array.listIterator();
-		while(entries.hasNext()){
-			NodeFactory.create(entries.next()).visit(visitor);
-		}
-	}
 
 	@Override
-	public void visit(NodeVisitor visitor) {
-		visitor.accept(this);
+	public void accept(NodeVisitor visitor) {
+		visitor.visit(this);
 	}
 
 	public Node addChild(Object value){

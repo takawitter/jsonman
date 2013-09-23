@@ -25,10 +25,9 @@ public interface Node {
 
 	Object getValue();
 	void setValue(Object value);
-	void visit(NodeVisitor visitor);
+	void accept(NodeVisitor visitor);
 
 	Iterable<Node> getChildren();
-	void visitChildren(NodeVisitor visitor);
 
 	<T extends Node> T cast();
 	Node createEmpty();

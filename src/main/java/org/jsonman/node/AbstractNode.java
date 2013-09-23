@@ -16,7 +16,6 @@
 package org.jsonman.node;
 
 import org.jsonman.Node;
-import org.jsonman.NodeVisitor;
 
 public abstract class AbstractNode implements Node{
 	public AbstractNode(){
@@ -54,11 +53,6 @@ public abstract class AbstractNode implements Node{
 
 	@Override
 	public Iterable<Node> getChildren() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void visitChildren(final NodeVisitor visitor) {
 		throw new UnsupportedOperationException();
 	}
 
