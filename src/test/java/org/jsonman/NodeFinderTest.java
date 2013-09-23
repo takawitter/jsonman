@@ -22,11 +22,48 @@ import net.arnx.jsonic.JSON;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jsonman.finder.Reference;
+import org.jsonman.node.NumberNode;
+import org.jsonman.node.StringNode;
 import org.jsonman.util.BiConsumer;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class NodeFinderTest {
+	@Test
+	public void test_1() throws Exception{
+		Node src = NodeFactory.create(JSON.decode("{\"name\":\"value\"}"));
+		new NodeFinder("/name").find(src, new BiConsumer<Deque<Reference>, Node>() {
+				@Override
+				public void accept(Deque<Reference> path, Node node) {
+					Assert.assertEquals(1, path.size());
+					Assert.assertTrue(path.peekLast().isMap());
+					Assert.assertEquals("name", path.peekLast().getId());
+					Assert.assertTrue(node.isString());
+					StringNode mn = node.cast();
+					Assert.assertEquals("value", mn.getValue());
+				}
+			});
+	}
+
+	@Test
+	public void test_2() throws Exception{
+		@SuppressWarnings("rawtypes")
+		final Pair[] expecteds = {
+				Pair.of("/0/age", 30),
+				Pair.of("/1/age", 40),
+		};
+		Node src = NodeFactory.create(JSON.decode("[{\"name\":\"john\",\"age\":30},{\"name\":\"bob\",\"age\":40}]"));
+		new NodeFinder("/age").find(src, new BiConsumer<Deque<Reference>, Node>() {
+				@Override
+				public void accept(Deque<Reference> path, Node node) {
+					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
+					Assert.assertEquals("" + i, expecteds[i].getRight(), ((NumberNode)node).getValue().intValue());
+					i++;
+				}
+				private int i;
+			});
+	}
+
 	@Test
 	public void test_3() throws Exception{
 		@SuppressWarnings("rawtypes")
