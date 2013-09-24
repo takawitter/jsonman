@@ -129,3 +129,4 @@ public class NodeFilterTest {
 	}
 }
 ```
+[NodeFilteringTest_1.json](https://github.com/takawitter/jsonman/blob/master/src/test/resources/org/jsonman/NodeFilteringTest_1.json)

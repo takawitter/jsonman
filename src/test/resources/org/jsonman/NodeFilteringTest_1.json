@@ -3,24 +3,3 @@
 {"tag":"h1","attributes":[{"name":"class","value":"h1class"},{"name":"id","value":"h11"}]},
 {"tag":"h2","attributes":[{"name":"class","value":"h2class"},{"name":"id","value":"h21"}]}
 ]
-// /*/tag  alias: /tag
-// [{"tag":"body"},{"tag":"h1"},{"tag":"h2"}]
-
-// /*[tag='body']  alias: /[tag='body']
-// [{"tag":"body"}]
-
-// /*/attributes/*/name  aliases: /attributes/name
-// [{"attributes":[{"name":"class"},{"name":"id"}]},{"attributes":[{"name":"class"},{"name":"id"}]},{"attributes":[{"name":"class"},{"name":"id"}]}]
-
-// /*/attributes/*/name[value()='class']
-// [{"attributes":[{"name":"class"}]},{"attributes":[{"name":"class"}]},{"attributes":[{"name":"class"}]}]
-
-// /*/attributes/*[name='class']  aliases: /attributes[name='class']
-// [{"attributes":[{"name":"class","value":"bodyclass"}]},{"attributes":[{"name":"class","value":"h1class"}]},{"attributes":[{"name":"class","value":"h2class"}]}]
-
-// 配列は指定しない(勝手に展開)。
-// mapのname部をパス形式で連結して指定する。
-// 条件は[]で囲う。子(Map)のnameに対して指定。条件に合致する子(Map)全体が選択される。
-// /name/name/name
-// /name[childname=value]
-// /name[childname=value]/name
