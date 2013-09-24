@@ -72,11 +72,15 @@ public class NodeTest {
 
 ## Sample code 2: Finding node.
 
+FYI. [Java8 Lambda version](https://gist.github.com/takawitter/6684644) of this code.
 ```java
 public class NodeFinderTest {
 	@Test
 	public void test_4() throws Exception{
-		Node src = NodeFactory.create(JSON.decode("{\"people\":[{\"name\":\"john\",\"age\":20},{\"name\":\"bob\",\"age\":30}]}"));
+		Node src = NodeFactory.create(JSON.decode(
+			"{\"people\":[{\"name\":\"john\",\"age\":20}," +
+			"{\"name\":\"bob\",\"age\":30}]}"
+			));
 		new NodeFinder(src).find("/people[name=bob]", new BiConsumer<Deque<Reference>, Node>() {
 				@Override
 				public void accept(Deque<Reference> path, Node node) {
