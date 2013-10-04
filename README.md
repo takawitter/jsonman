@@ -1,14 +1,14 @@
 jsonman
 =======
 
-JSON Manipulator Library.
+JSONMAN is the simple JSON Manipulator Library. It constructs light-weight tree structure from parsed JSON (Map&lt;String, Object&gt;) and 
+provides finding, updating and filtering function based on the XPath-like expression (e.g. /people/person/name).
+JSONMAN is designed to be used with [JSONIC](http://jsonic.sourceforge.jp/) or any JSON decoder which returns decoded JSON as Map&lt;String, Object&gt;.
 
 [![Build Status](https://buildhive.cloudbees.com/job/takawitter/job/jsonman/badge/icon)](https://buildhive.cloudbees.com/job/takawitter/job/jsonman/)
- **latest [jsonman-0.0.1-SNAPSHOT.jar](https://buildhive.cloudbees.com/job/takawitter/job/jsonman/ws/target/jsonman-0.0.1-SNAPSHOT.jar)**
+ **latest binary [jsonman-0.0.1-SNAPSHOT.jar](https://buildhive.cloudbees.com/job/takawitter/job/jsonman/ws/target/jsonman-0.0.1-SNAPSHOT.jar)**
 
-JSONMAN constructs light-weight tree structure from parsed JSON (Map&lt;String, Object&gt;) and 
-provides finding, updating and filtering function based on XPath-like expression.
-JSONMAN is designed to be used with [JSONIC](http://jsonic.sourceforge.jp/) or any JSON decoder which returns decoded JSON as Map&lt;String, Object&gt;.
+See [original maven repository](https://github.com/takawitter/repo) to use from pom.xml.
 
 ## Sample code 1: Traversing tree
 
