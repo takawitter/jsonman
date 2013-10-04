@@ -1,4 +1,4 @@
-package org.jsonman;
+package org.jsonman.finder;
 
 import java.util.List;
 
