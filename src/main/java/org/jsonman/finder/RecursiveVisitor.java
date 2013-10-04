@@ -16,6 +16,7 @@
 package org.jsonman.finder;
 
 import java.util.Deque;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jsonman.Node;
@@ -23,8 +24,8 @@ import org.jsonman.NodeAdapter;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 
-public class RecursiveVisitor extends NodeAdapter{
-	public RecursiveVisitor(Deque<Reference> paths){
+public class RecursiveVisitor<T extends Deque<Reference> & List<Reference>> extends NodeAdapter{
+	public RecursiveVisitor(T paths){
 		this.paths = paths;
 	}
 
@@ -47,9 +48,9 @@ public class RecursiveVisitor extends NodeAdapter{
 		}
 	}
 
-	protected Deque<Reference> getPaths(){
+	protected T getPaths(){
 		return paths;
 	}
 
-	private Deque<Reference> paths;
+	private T paths;
 }

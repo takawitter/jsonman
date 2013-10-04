@@ -15,9 +15,11 @@
  */
 package org.jsonman;
 
+import java.text.ParseException;
 import java.util.Iterator;
 
 import org.jsonman.finder.Reference;
+import org.jsonman.finder.ReferenceParser;
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.MapNode;
 
@@ -28,6 +30,10 @@ public class NodeUpdater {
 
 	public Node getTarget() {
 		return target;
+	}
+
+	public void update(String referencePath, Node node) throws ParseException{
+		update(ReferenceParser.parse(referencePath), node);
 	}
 
 	public void update(Iterable<Reference> path, Node node){

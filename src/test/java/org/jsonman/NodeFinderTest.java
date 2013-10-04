@@ -16,7 +16,7 @@
 package org.jsonman;
 
 import java.io.InputStream;
-import java.util.Deque;
+import java.util.List;
 
 import net.arnx.jsonic.JSON;
 
@@ -33,12 +33,12 @@ public class NodeFinderTest {
 	@Test
 	public void test_1() throws Exception{
 		Node src = NodeFactory.create(JSON.decode("{\"name\":\"value\"}"));
-		new NodeFinder(src).find("/name", new BiConsumer<Deque<Reference>, Node>() {
+		new NodeFinder(src).find("/name", new BiConsumer<List<Reference>, Node>() {
 				@Override
-				public void accept(Deque<Reference> path, Node node) {
+				public void accept(List<Reference> path, Node node) {
 					Assert.assertEquals(1, path.size());
-					Assert.assertTrue(path.peekLast().isMap());
-					Assert.assertEquals("name", path.peekLast().getId());
+					Assert.assertTrue(path.get(0).isMap());
+					Assert.assertEquals("name", path.get(0).getId());
 					Assert.assertTrue(node.isString());
 					StringNode mn = node.cast();
 					Assert.assertEquals("value", mn.getValue());
@@ -54,9 +54,9 @@ public class NodeFinderTest {
 				Pair.of("/1/age", 40),
 		};
 		Node src = NodeFactory.create(JSON.decode("[{\"name\":\"john\",\"age\":30},{\"name\":\"bob\",\"age\":40}]"));
-		new NodeFinder(src).find("/age", new BiConsumer<Deque<Reference>, Node>() {
+		new NodeFinder(src).find("/age", new BiConsumer<List<Reference>, Node>() {
 				@Override
-				public void accept(Deque<Reference> path, Node node) {
+				public void accept(List<Reference> path, Node node) {
 					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
 					Assert.assertEquals("" + i, expecteds[i].getRight(), ((NumberNode)node).getValue().intValue());
 					i++;
@@ -78,9 +78,9 @@ public class NodeFinderTest {
 		};
 		try(InputStream is = NodeFinderTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
 			Node src = NodeFactory.create(JSON.decode(is));
-			new NodeFinder(src).find("/attributes/name", new BiConsumer<Deque<Reference>, Node>() {
+			new NodeFinder(src).find("/attributes/name", new BiConsumer<List<Reference>, Node>() {
 				@Override
-				public void accept(Deque<Reference> path, Node node) {
+				public void accept(List<Reference> path, Node node) {
 					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
 					Assert.assertEquals("" + i, expecteds[i].getRight(), node.getClass().getSimpleName());
 					i++;
@@ -93,9 +93,9 @@ public class NodeFinderTest {
 	@Test
 	public void test_4() throws Exception{
 		Node src = NodeFactory.create(JSON.decode("{\"people\":[{\"name\":\"john\",\"age\":20},{\"name\":\"bob\",\"age\":30}]}"));
-		new NodeFinder(src).find("/people[name=bob]", new BiConsumer<Deque<Reference>, Node>() {
+		new NodeFinder(src).find("/people[name=bob]", new BiConsumer<List<Reference>, Node>() {
 				@Override
-				public void accept(Deque<Reference> path, Node node) {
+				public void accept(List<Reference> path, Node node) {
 					Assert.assertTrue(node.isMap());
 					MapNode mn = node.cast();
 					Assert.assertEquals("bob", mn.getChildValue("name"));
@@ -114,9 +114,9 @@ public class NodeFinderTest {
 		};
 		try(InputStream is = NodeFinderTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
 			Node src = NodeFactory.create(JSON.decode(is));
-			new NodeFinder(src).find("/attributes[name='class']", new BiConsumer<Deque<Reference>, Node>() {
+			new NodeFinder(src).find("/attributes[name='class']", new BiConsumer<List<Reference>, Node>() {
 				@Override
-				public void accept(Deque<Reference> path, Node node) {
+				public void accept(List<Reference> path, Node node) {
 					Assert.assertEquals("" + i, expecteds[i].getLeft(), pathToString(path));
 					Assert.assertEquals("" + i, expecteds[i].getRight(), node.getClass().getSimpleName());
 					Assert.assertTrue(node.isMap());

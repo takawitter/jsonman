@@ -15,8 +15,8 @@
  */
 package org.jsonman;
 
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.jsonman.finder.ArrayReference;
 import org.jsonman.finder.Condition;
@@ -38,13 +38,13 @@ public class NodeFinder {
 		this.src = src;
 	}
 
-	public void find(String path, BiConsumer<Deque<Reference>, Node> consumer){
+	public void find(String path, BiConsumer<List<Reference>, Node> consumer){
 		find(src, FragmentScanner.parsePath(path), consumer);
 	}
 
-	private static void find(Node src, final Fragment[] fragments, final BiConsumer<Deque<Reference>, Node> consumer){
+	private static void find(Node src, final Fragment[] fragments, final BiConsumer<List<Reference>, Node> consumer){
 		if(fragments.length == 0) return;
-		src.accept(new RecursiveVisitor(new LinkedList<Reference>()){
+		src.accept(new RecursiveVisitor<LinkedList<Reference>>(new LinkedList<Reference>()){
 			@Override
 			public void visit(ArrayNode node) {
 				if(condition != null){
@@ -76,7 +76,7 @@ public class NodeFinder {
 					if(!condition.matched(node.getChild(condition.getName()))) return;
 				}
 				if(nest == fragments.length){
-					consumer.accept(getPaths(), node);
+					consumer.accept((List<Reference>)getPaths(), node);
 					return;
 				}
 				Fragment f = fragments[nest];

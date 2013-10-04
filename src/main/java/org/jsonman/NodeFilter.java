@@ -15,7 +15,7 @@
  */
 package org.jsonman;
 
-import java.util.Deque;
+import java.util.List;
 
 import org.jsonman.finder.Reference;
 import org.jsonman.util.BiConsumer;
@@ -28,9 +28,9 @@ public class NodeFilter {
 	public Node filter(Node src){
 		final NodeUpdater setter = new NodeUpdater(src.createEmpty());
 		for(String p : paths){
-			new NodeFinder(src).find(p, new BiConsumer<Deque<Reference>, Node>(){
+			new NodeFinder(src).find(p, new BiConsumer<List<Reference>, Node>(){
 				@Override
-				public void accept(Deque<Reference> path, Node node) {
+				public void accept(List<Reference> path, Node node) {
 					StringBuilder b = new StringBuilder();
 					for(Reference s : path){
 						b.append("/").append(s.getId());

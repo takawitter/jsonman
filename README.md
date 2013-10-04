@@ -102,11 +102,9 @@ public class NodeUpdaterTest {
 	public void test_set() throws Exception{
 		NodeUpdater setter = new NodeUpdater(new ArrayNode());
 		setter.update(
-				Arrays.asList(
-						new ArrayReference(0), new MapReference("attributes"),
-						new ArrayReference(0), new MapReference("name")
-				),
-				new StringNode("class"));
+				"/0/attributes/0/name",
+				new StringNode("class")
+				);
 		Assert.assertEquals(
 				"[{\"attributes\":[{\"name\":\"class\"}]}]",
 				JSON.encode(setter.getTarget().getValue())
