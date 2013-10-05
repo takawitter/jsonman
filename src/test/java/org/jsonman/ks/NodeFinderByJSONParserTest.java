@@ -75,7 +75,7 @@ public class NodeFinderByJSONParserTest {
 				Pair.of("/2/attributes/0/name", "StringNode"),
 				Pair.of("/2/attributes/1/name", "StringNode"),
 		};
-		try(InputStream is = NodeFinderByJSONParserTest.class.getResourceAsStream("NodeFilteringTest_1.json")){
+		try(InputStream is = NodeFinderByJSONParserTest.class.getResourceAsStream("/org/jsonman/NodeFilteringTest_1.json")){
 			new NodeFinderByJSONParser(is).find("/attributes/name", new BiConsumer<List<Reference>, Node>() {
 				@Override
 				public void accept(List<Reference> path, Node node) {
