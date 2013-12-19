@@ -68,7 +68,7 @@ public class NodeUpdater {
 						if(t.isMap() && node.isMap()){
 							((MapNode)t).mergeValue((MapNode)node);
 						} else{
-							t.setValue(node.getValue());
+							mn.setChild(name, node);
 						}
 						break;
 					}
