@@ -25,6 +25,11 @@ public class StringNode extends AbstractNode{
 	}
 
 	@Override
+	public StringNode clone() {
+		return new StringNode(value);
+	}
+
+	@Override
 	public boolean isString(){
 		return true;
 	}

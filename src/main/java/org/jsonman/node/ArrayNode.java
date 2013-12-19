@@ -34,6 +34,11 @@ public class ArrayNode extends AbstractNode{
 	}
 
 	@Override
+	public ArrayNode clone() {
+		return new ArrayNode(new ArrayList<Object>(array));
+	}
+
+	@Override
 	public boolean isArray(){
 		return true;
 	}

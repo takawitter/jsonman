@@ -23,6 +23,11 @@ public class NullNode extends AbstractNode{
 	}
 
 	@Override
+	public NullNode clone() {
+		return this;
+	}
+
+	@Override
 	public boolean isNull(){
 		return true;
 	}

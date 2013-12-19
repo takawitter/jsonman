@@ -37,6 +37,8 @@ public abstract class AbstractNode implements Node{
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
 
+	public abstract AbstractNode clone();
+
 	@Override
 	public boolean isString(){
 		return false;

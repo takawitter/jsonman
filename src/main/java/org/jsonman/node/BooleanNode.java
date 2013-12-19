@@ -24,6 +24,11 @@ public class BooleanNode extends AbstractNode{
 	}
 
 	@Override
+	public BooleanNode clone() {
+		return new BooleanNode(value);
+	}
+
+	@Override
 	public boolean isBoolean(){
 		return true;
 	}

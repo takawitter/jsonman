@@ -25,6 +25,11 @@ public class NumberNode extends AbstractNode{
 	}
 
 	@Override
+	public NumberNode clone() {
+		return new NumberNode(value);
+	}
+
+	@Override
 	public boolean isNumber(){
 		return true;
 	}

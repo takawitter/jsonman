@@ -34,6 +34,11 @@ public class MapNode extends AbstractNode{
 	}
 
 	@Override
+	public MapNode clone() {
+		return new MapNode(new LinkedHashMap<String, Object>(map));
+	}
+
+	@Override
 	public boolean isMap(){
 		return true;
 	}

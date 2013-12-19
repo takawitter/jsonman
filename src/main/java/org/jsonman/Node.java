@@ -15,7 +15,7 @@
  */
 package org.jsonman;
 
-public interface Node {
+public interface Node extends Cloneable{
 	boolean isMap();
 	boolean isArray();
 	boolean isString();
@@ -31,4 +31,6 @@ public interface Node {
 
 	<T extends Node> T cast();
 	Node createEmpty();
+
+	Object clone();
 }
