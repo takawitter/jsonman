@@ -32,6 +32,10 @@ public class NodeUpdater {
 		return target;
 	}
 
+	public void update(String referencePath, Object value) throws ParseException{
+		update(ReferenceParser.parse(referencePath), NodeFactory.create(value));
+	}
+
 	public void update(String referencePath, Node node) throws ParseException{
 		update(ReferenceParser.parse(referencePath), node);
 	}
