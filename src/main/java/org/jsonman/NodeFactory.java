@@ -17,6 +17,7 @@ package org.jsonman;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ public class NodeFactory {
 			return new StringNode((String)value);
 		} else if(value instanceof Boolean){
 			return new BooleanNode((Boolean)value);
+		} else if(value.getClass().isArray()){
+			return new ArrayNode(Arrays.asList((Object[])value));
 		} else{
 			throw new IllegalArgumentException("No suitable node class for " + value.getClass());
 		}
