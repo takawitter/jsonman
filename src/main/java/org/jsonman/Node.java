@@ -32,5 +32,5 @@ public interface Node extends Cloneable{
 	<T extends Node> T cast();
 	Node createEmpty();
 
-	Object clone();
+	Node clone();
 }
