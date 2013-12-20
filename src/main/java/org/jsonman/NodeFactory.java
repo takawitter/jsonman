@@ -15,13 +15,9 @@
  */
 package org.jsonman;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import net.arnx.jsonic.JSON;
 
 import org.jsonman.node.ArrayNode;
 import org.jsonman.node.BooleanNode;
@@ -51,9 +47,5 @@ public class NodeFactory {
 		} else{
 			throw new IllegalArgumentException("No suitable node class for " + value.getClass());
 		}
-	}
-
-	public static Node create(InputStream is) throws IOException{
-		return create(JSON.decode(is));
 	}
 }
