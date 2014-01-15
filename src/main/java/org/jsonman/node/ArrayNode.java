@@ -80,6 +80,11 @@ public class ArrayNode extends AbstractNode{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T extends Node> Iterable<T> getChildrenAs(Class<T> clazz) {
+		return (Iterable<T>)getChildren();
+	}
+
 	@Override
 	public Iterable<Node> getChildren() {
 		return new Iterable<Node>() {
