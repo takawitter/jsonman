@@ -63,6 +63,12 @@ public class ArrayNode extends AbstractNode{
 		else return NodeFactory.create(array.get(index));
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T extends Node> T getChildAs(int index, Class<T> clazz){
+		if(index >= array.size()) return null;
+		else return (T)NodeFactory.create(array.get(index));
+	}
+
 	public void setChild(int index, Node child){
 		if(index < array.size()){
 			array.set(index, child.getValue());
